@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply scrollbar-app m-0 min-h-screen bg-background-dark font-body text-text-main antialiased;
+  }
+
+  #root {
+    @apply min-h-screen;
+  }
+}
+
+@layer components {
+  /* Shared layout shell — reuse on every page */
+  .page-shell {
+    @apply flex min-h-screen flex-col overflow-x-hidden;
+  }
+
+  .page-container {
+    @apply mx-auto w-full max-w-[1440px] px-8 md:px-16;
+  }
+
+  .hero-blur-bg {
+    @apply pointer-events-none absolute inset-0 z-0;
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgba(27, 187, 131, 0.15) 0%,
+      transparent 60%
+    );
+    filter: blur(80px);
+  }
+
+  .text-glow {
+    text-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
+  }
+
+  .scrollbar-app {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.surface-hover') theme('colors.background-dark');
+  }
+
+  .scrollbar-app::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .scrollbar-app::-webkit-scrollbar-track {
+    @apply bg-background-dark;
+  }
+
+  .scrollbar-app::-webkit-scrollbar-thumb {
+    @apply rounded bg-surface-hover;
+  }
+
+  .scrollbar-app::-webkit-scrollbar-thumb:hover {
+    @apply bg-text-muted;
+  }
+}
