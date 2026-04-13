@@ -14,7 +14,7 @@ export function Footer({
       <div className="page-container max-w-[1440px]">
         <div className="grid w-full grid-cols-1 items-center gap-10 md:grid-cols-3 md:gap-8">
           <nav
-            className="order-1 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 justify-self-center text-center md:order-2 md:justify-self-center"
+            className="order-1 flex flex-nowrap items-center justify-center gap-x-2 gap-y-0 justify-self-center text-center sm:gap-x-4 md:order-2 md:gap-x-8 md:justify-self-center"
             aria-label="Social links"
           >
             {socialLinks.map(({ label, href }) => (
@@ -23,7 +23,7 @@ export function Footer({
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm font-semibold uppercase tracking-wider text-text-muted transition-colors hover:text-primary"
+                className="whitespace-nowrap text-xs font-semibold uppercase tracking-wide text-text-muted transition-colors hover:text-primary sm:text-sm sm:tracking-wider"
               >
                 {label}
               </a>

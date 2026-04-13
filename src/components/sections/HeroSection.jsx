@@ -3,7 +3,7 @@ import { MaterialIcon } from '../ui/MaterialIcon.jsx'
 
 export function HeroSection({ title, subtitle, backgroundImage }) {
   return (
-    <section className="relative flex min-h-[870px] w-full items-center justify-center overflow-hidden bg-background-dark px-6">
+    <section className="relative flex min-h-[calc(100dvh-5rem)] w-full flex-col items-center justify-center overflow-hidden bg-background-dark px-6">
       <div className="absolute inset-0 z-0">
         <div
           className="absolute inset-0 scale-105 bg-cover bg-center opacity-30"
@@ -13,7 +13,7 @@ export function HeroSection({ title, subtitle, backgroundImage }) {
         <div className="absolute inset-0 bg-gradient-to-b from-background-dark/50 to-transparent" />
         <div className="hero-blur-bg" />
       </div>
-      <div className="relative z-10 mt-16 flex max-w-4xl flex-col items-center gap-8 text-center">
+      <div className="relative z-10 flex max-w-4xl flex-col items-center gap-8 py-8 text-center">
         <h1 className="font-display text-6xl font-black uppercase leading-none tracking-tighter text-white text-glow md:text-8xl lg:text-[120px]">
           {title}
         </h1>
