@@ -3,7 +3,7 @@ const img = (id, w = 800, h = 600) =>
 
 export const navLinks = [
   { href: '#beats', label: 'Beats' },
-  { href: '#licenses', label: 'Licenses' },
+  { href: '#beats', label: 'Licenses' },
   { href: '#about', label: 'About' },
 ]
 
@@ -23,7 +23,21 @@ export const featuredBeats = [
     meta: '140 BPM · Trap',
     price: '$29',
     image: img('1511379938547-c1f69419868d', 600, 600),
-    alt: 'Album art',
+    alt: 'Midnight Pulse artwork',
+    description:
+      'Punchy 808s, wide pads, and room for hooks. Mixed for streaming loudness with headroom for vocals.',
+    tags: ['#Trap', '#Dark', '#Streaming'],
+    licenseEyebrow: 'License',
+    plans: [
+      { name: 'Basic Lease', price: '$29', detail: 'MP3' },
+      {
+        variant: 'popular',
+        name: 'Premium Lease',
+        price: '$79',
+        detail: 'WAV + Stems',
+        badge: 'Popular',
+      },
+    ],
   },
   {
     id: '2',
@@ -31,7 +45,21 @@ export const featuredBeats = [
     meta: '92 BPM · R&B',
     price: '$35',
     image: img('1514320291840-2e0a9bf2a9ae', 600, 600),
-    alt: 'Album art',
+    alt: 'Neon Drift artwork',
+    description:
+      'Warm keys, swung drums, and silky low end—built for late-night hooks and stacked harmonies.',
+    tags: ['#R&B', '#Soul', '#Hooks'],
+    licenseEyebrow: 'License',
+    plans: [
+      { name: 'Basic Lease', price: '$35', detail: 'MP3' },
+      {
+        variant: 'popular',
+        name: 'Premium Lease',
+        price: '$89',
+        detail: 'WAV + Stems',
+        badge: 'Popular',
+      },
+    ],
   },
   {
     id: '3',
@@ -39,7 +67,21 @@ export const featuredBeats = [
     meta: '128 BPM · Electronic',
     price: '$32',
     image: img('1470225620780-dba8ba36b745', 600, 600),
-    alt: 'Album art',
+    alt: 'Glass City artwork',
+    description:
+      'Glassy synths, driving sidechain, and crisp transients—club-ready with space for ad-libs.',
+    tags: ['#Electronic', '#Club', '#Wide'],
+    licenseEyebrow: 'License',
+    plans: [
+      { name: 'Basic Lease', price: '$32', detail: 'MP3' },
+      {
+        variant: 'popular',
+        name: 'Premium Lease',
+        price: '$85',
+        detail: 'WAV + Stems',
+        badge: 'Popular',
+      },
+    ],
   },
   {
     id: '4',
@@ -47,32 +89,23 @@ export const featuredBeats = [
     meta: '85 BPM · Soul',
     price: '$40',
     image: img('1459749411175-04bf5292ceea', 600, 600),
-    alt: 'Album art',
+    alt: 'Velvet Runway artwork',
+    description:
+      'Velvet chords, live-feel bass, and pocket drums—made for soulful verses and stacked backgrounds.',
+    tags: ['#Soul', '#Warm', '#Live'],
+    licenseEyebrow: 'License',
+    plans: [
+      { name: 'Basic Lease', price: '$40', detail: 'MP3' },
+      {
+        variant: 'popular',
+        name: 'Premium Lease',
+        price: '$95',
+        detail: 'WAV + Stems',
+        badge: 'Popular',
+      },
+    ],
   },
 ]
-
-export const spotlight = {
-  title: 'Exclusive License Pack',
-  description:
-    'Get stems, alternate mixes, and priority support for your next release.',
-  tags: ['Stems', 'Broadcast'],
-  image: img('1511671782779-c97d3d27a1d4', 800, 600),
-  alt: 'Studio spotlight',
-  plans: [
-    {
-      variant: 'popular',
-      name: 'Pro',
-      price: '$199',
-      detail: 'per track',
-      badge: 'Popular',
-    },
-    {
-      name: 'Indie',
-      price: '$99',
-      detail: 'per track',
-    },
-  ],
-}
 
 export const customComposition = {
   eyebrow: 'Custom work',

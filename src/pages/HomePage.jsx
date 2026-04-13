@@ -1,10 +1,11 @@
+import { useState } from 'react'
 import { Footer } from '../components/layout/Footer.jsx'
 import { TopNav } from '../components/layout/TopNav.jsx'
 import { CustomCompositionSection } from '../components/sections/CustomCompositionSection.jsx'
 import { EditorialAboutSection } from '../components/sections/EditorialAboutSection.jsx'
 import { FeaturedBeatsSection } from '../components/sections/FeaturedBeatsSection.jsx'
 import { HeroSection } from '../components/sections/HeroSection.jsx'
-import { SpotlightSection } from '../components/sections/SpotlightSection.jsx'
+import { LicenseModal } from '../components/ui/LicenseModal.jsx'
 import {
   about,
   customComposition,
@@ -12,10 +13,11 @@ import {
   footer,
   hero,
   navLinks,
-  spotlight,
 } from '../data/homeContent.js'
 
 export default function HomePage() {
+  const [licenseTrack, setLicenseTrack] = useState(null)
+
   return (
     <div className="page-shell">
       <TopNav links={navLinks} cartCount={0} />
@@ -25,10 +27,10 @@ export default function HomePage() {
           subtitle={hero.subtitle}
           backgroundImage={hero.backgroundImage}
         />
-        <FeaturedBeatsSection beats={featuredBeats} />
-        <div id="licenses">
-          <SpotlightSection spotlight={spotlight} />
-        </div>
+        <FeaturedBeatsSection
+          beats={featuredBeats}
+          onSelectLicense={setLicenseTrack}
+        />
         <CustomCompositionSection content={customComposition} />
         <EditorialAboutSection about={about} />
       </main>
@@ -38,6 +40,11 @@ export default function HomePage() {
         legal={footer.legal}
         developerCredit={footer.developerCredit}
         socialLinks={footer.socialLinks}
+      />
+      <LicenseModal
+        open={licenseTrack != null}
+        track={licenseTrack}
+        onClose={() => setLicenseTrack(null)}
       />
     </div>
   )
