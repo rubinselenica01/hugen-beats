@@ -152,7 +152,7 @@ export const about = {
 export const footer = {
   email: 'hello@hugenbeats.example',
   location: 'Remote · Worldwide',
-  legal: '© HUGEN BEATS. All rights reserved.',
+  legal: '©2026 HUGEN BEATS. All rights reserved.',
   developerCredit: '',
   socialLinks: [
     { label: 'YouTube', href: 'https://www.youtube.com/' },
