@@ -96,7 +96,7 @@ export const customComposition = {
       text: 'Masters tuned for streaming loudness targets.',
     },
   ],
-  startingPrice: '$499',
+  startingPrice: '$1000',
   cta: 'Start a project',
   sideImage: img('1598488035139-03d029a0ce5a', 600, 800),
 }
@@ -122,8 +122,8 @@ export const footer = {
   legal: '© HUGEN BEATS. All rights reserved.',
   developerCredit: '',
   socialLinks: [
-    { label: 'Instagram', href: '#' },
-    { label: 'YouTube', href: '#' },
-    { label: 'SoundCloud', href: '#' },
+    { label: 'YouTube', href: 'https://www.youtube.com/' },
+    { label: 'Spotify', href: 'https://open.spotify.com/' },
+    { label: 'Instagram', href: 'https://www.instagram.com/' },
   ],
 }
