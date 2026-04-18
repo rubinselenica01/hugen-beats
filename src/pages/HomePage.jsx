@@ -15,6 +15,7 @@ import {
   hero,
   navLinks,
 } from '../data/homeContent.js'
+import { scrollElementBelowNav } from '../utils/scrollToAnchor.js'
 
 export default function HomePage() {
   const [licenseTrack, setLicenseTrack] = useState(null)
@@ -27,7 +28,7 @@ export default function HomePage() {
     const el = document.getElementById(id)
     if (!el) return
     const frame = window.requestAnimationFrame(() => {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      scrollElementBelowNav(el, { behavior: 'smooth' })
     })
     return () => window.cancelAnimationFrame(frame)
   }, [location.pathname, location.hash])

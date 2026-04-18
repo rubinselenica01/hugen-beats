@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
+import { scrollElementBelowNav } from '../../utils/scrollToAnchor.js'
 import { useCart } from '../../context/CartContext.jsx'
 import { LogoMark, LogoWordmark } from '../brand/Logo.jsx'
 import { ButtonPrimarySm } from '../ui/Button.jsx'
@@ -45,12 +46,10 @@ export function TopNav({ links }) {
                           location.hash === `#${id}`
                         ) {
                           e.preventDefault()
-                          document
-                            .getElementById(id)
-                            ?.scrollIntoView({
-                              behavior: 'smooth',
-                              block: 'start',
-                            })
+                          const target = document.getElementById(id)
+                          if (target) {
+                            scrollElementBelowNav(target, { behavior: 'smooth' })
+                          }
                         }
                       }}
                     >

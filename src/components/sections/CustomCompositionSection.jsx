@@ -17,7 +17,7 @@ export function CustomCompositionSection({ content }) {
   return (
     <section
       id="custom"
-      className="page-container flex w-full max-w-[1440px] scroll-mt-24 flex-col gap-12 py-12"
+      className="page-container flex w-full max-w-[1440px] flex-col gap-12 py-12"
     >
       {sectionTitle ? (
         <SectionHeading

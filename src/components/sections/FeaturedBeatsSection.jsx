@@ -6,7 +6,7 @@ import { SectionHeading } from '../ui/SectionHeading.jsx'
 export function FeaturedBeatsSection({ beats, onSelectLicense }) {
   return (
     <section
-      className="page-container flex w-full max-w-[1440px] scroll-mt-24 flex-col gap-8 py-24"
+      className="page-container flex w-full max-w-[1440px] flex-col gap-8 py-24"
       id="beats"
     >
       <SectionHeading

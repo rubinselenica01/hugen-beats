@@ -21,7 +21,7 @@ export default function BeatsCatalogPage() {
               'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(27, 187, 131, 0.12), transparent 55%)',
           }}
         />
-        <div className="page-container relative z-10 flex w-full max-w-[1440px] flex-col gap-12 py-24">
+        <div className="page-container relative z-10 flex w-full max-w-[1440px] flex-col gap-12 pt-8 pb-20 md:pt-10 md:pb-24">
           <SectionHeading
             title="Beats catalog"
             subtitle="Browse every track—same leases, same quality."

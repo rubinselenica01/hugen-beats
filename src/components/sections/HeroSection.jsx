@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom'
+import { scrollElementBelowNav } from '../../utils/scrollToAnchor.js'
 import { ButtonOutline, ButtonPrimary } from '../ui/Button.jsx'
 import { MaterialIcon } from '../ui/MaterialIcon.jsx'
 
@@ -8,9 +9,8 @@ export function HeroSection({ title, subtitle, backgroundImage }) {
 
   const goToCustomComposition = () => {
     if (location.pathname === '/' && location.hash === '#custom') {
-      document
-        .getElementById('custom')
-        ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      const el = document.getElementById('custom')
+      if (el) scrollElementBelowNav(el, { behavior: 'smooth' })
       return
     }
     navigate({ pathname: '/', hash: 'custom' })

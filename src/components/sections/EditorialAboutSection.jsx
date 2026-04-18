@@ -1,7 +1,7 @@
 export function EditorialAboutSection({ about }) {
   const { eyebrow, title, portrait, paragraphs, paragraph2, credits } = about
   return (
-    <section className="mt-12 w-full scroll-mt-24 bg-black py-24" id="about">
+    <section className="mt-12 w-full bg-black py-24" id="about">
       <div className="page-container flex max-w-[1440px] flex-col items-center gap-16 lg:flex-row">
         <div className="relative w-full lg:w-1/2">
           <div className="relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden rounded-lg grayscale transition-all duration-700 hover:grayscale-0">

@@ -7,6 +7,10 @@
     --top-nav-height: 4.5rem;
   }
 
+  html {
+    scroll-padding-top: var(--top-nav-height);
+  }
+
   body {
     @apply scrollbar-app m-0 min-h-screen bg-background-dark font-body text-text-main antialiased;
   }
