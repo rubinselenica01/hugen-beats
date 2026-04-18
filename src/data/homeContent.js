@@ -290,6 +290,9 @@ const catalogBeatsExtra = [
 export const beatsCatalog = [...featuredBeats, ...catalogBeatsExtra]
 
 export const customComposition = {
+  sectionTitle: 'Tailored production',
+  sectionSubtitle:
+    'From brief to master—built around your references and deadlines.',
   eyebrow: 'Custom work',
   title: 'Built for your story',
   description:

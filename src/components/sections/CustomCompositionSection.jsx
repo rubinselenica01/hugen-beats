@@ -1,8 +1,11 @@
 import { ButtonPrimary } from '../ui/Button.jsx'
 import { MaterialIcon } from '../ui/MaterialIcon.jsx'
+import { SectionHeading } from '../ui/SectionHeading.jsx'
 
 export function CustomCompositionSection({ content }) {
   const {
+    sectionTitle,
+    sectionSubtitle,
     eyebrow,
     title,
     description,
@@ -14,8 +17,15 @@ export function CustomCompositionSection({ content }) {
   return (
     <section
       id="custom"
-      className="page-container w-full max-w-[1440px] scroll-mt-24 py-12"
+      className="page-container flex w-full max-w-[1440px] scroll-mt-24 flex-col gap-12 py-12"
     >
+      {sectionTitle ? (
+        <SectionHeading
+          title={sectionTitle}
+          subtitle={sectionSubtitle}
+          centered
+        />
+      ) : null}
       <div className="relative flex w-full flex-col overflow-hidden rounded-lg border border-white/5 bg-surface shadow-2xl md:flex-row">
         <div className="pointer-events-none absolute right-0 top-0 h-full w-full bg-gradient-to-bl from-primary/5 to-transparent" />
         <div className="relative z-10 flex-1 p-8 lg:p-12">
