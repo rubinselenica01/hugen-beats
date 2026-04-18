@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { SpotlightLicenseCard } from './SpotlightLicenseCard.jsx'
 
-export function LicenseModal({ open, onClose, track }) {
+export function LicenseModal({ open, onClose, track, onAddToCart }) {
   useEffect(() => {
     if (!open) return
     const prev = document.body.style.overflow
@@ -52,6 +52,23 @@ export function LicenseModal({ open, onClose, track }) {
           aria-label="Close"
         >
           <span className="material-symbols-outlined text-xl">close</span>
+        </button>
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            onAddToCart?.(track)
+          }}
+          className="absolute bottom-4 right-4 z-[110] flex h-11 w-11 items-center justify-center rounded-full bg-primary text-background-dark shadow-glow transition-all hover:scale-105 hover:bg-primary-hover"
+          aria-label="Add to cart"
+          title="Add to cart"
+        >
+          <span
+            className="material-symbols-outlined text-[22px]"
+            style={{ fontVariationSettings: "'FILL' 1" }}
+          >
+            add_shopping_cart
+          </span>
         </button>
         <SpotlightLicenseCard
           title={title}
