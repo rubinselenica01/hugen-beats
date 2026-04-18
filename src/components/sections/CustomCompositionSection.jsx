@@ -12,7 +12,10 @@ export function CustomCompositionSection({ content }) {
     sideImage,
   } = content
   return (
-    <section className="page-container w-full max-w-[1440px] py-12">
+    <section
+      id="custom"
+      className="page-container w-full max-w-[1440px] scroll-mt-24 py-12"
+    >
       <div className="relative flex w-full flex-col overflow-hidden rounded-lg border border-white/5 bg-surface shadow-2xl md:flex-row">
         <div className="pointer-events-none absolute right-0 top-0 h-full w-full bg-gradient-to-bl from-primary/5 to-transparent" />
         <div className="relative z-10 flex-1 p-8 lg:p-12">

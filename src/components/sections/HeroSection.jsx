@@ -1,7 +1,21 @@
+import { useLocation, useNavigate } from 'react-router-dom'
 import { ButtonOutline, ButtonPrimary } from '../ui/Button.jsx'
 import { MaterialIcon } from '../ui/MaterialIcon.jsx'
 
 export function HeroSection({ title, subtitle, backgroundImage }) {
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const goToCustomComposition = () => {
+    if (location.pathname === '/' && location.hash === '#custom') {
+      document
+        .getElementById('custom')
+        ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      return
+    }
+    navigate({ pathname: '/', hash: 'custom' })
+  }
+
   return (
     <section
       id="hero"
@@ -26,11 +40,13 @@ export function HeroSection({ title, subtitle, backgroundImage }) {
           {subtitle[1]}
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-          <ButtonPrimary type="button">
+          <ButtonPrimary type="button" onClick={() => navigate('/beats')}>
             <MaterialIcon name="play_arrow" className="mr-2" filled />
             Listen to Beats
           </ButtonPrimary>
-          <ButtonOutline type="button">Buy License</ButtonOutline>
+          <ButtonOutline type="button" onClick={goToCustomComposition}>
+            Buy License
+          </ButtonOutline>
         </div>
       </div>
       <div className="absolute bottom-10 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 opacity-50 animate-bounce">
