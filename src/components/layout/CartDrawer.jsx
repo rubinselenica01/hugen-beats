@@ -1,6 +1,22 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { createPortal } from 'react-dom'
 import { ButtonPrimary } from '../ui/Button.jsx'
+
+function parseUsdToNumber(value) {
+  if (value == null) return 0
+  const s = String(value).replace(/[^0-9.]/g, '')
+  const n = parseFloat(s)
+  return Number.isFinite(n) ? n : 0
+}
+
+function formatUsd(n) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(n)
+}
 
 export function CartDrawer({ open, onClose, items, onRemove }) {
   useEffect(() => {
@@ -20,6 +36,15 @@ export function CartDrawer({ open, onClose, items, onRemove }) {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [open, onClose])
+
+  const totalUsd = useMemo(
+    () =>
+      items.reduce((sum, { track, plan }) => {
+        const raw = plan?.price ?? track?.price
+        return sum + parseUsdToNumber(raw)
+      }, 0),
+    [items],
+  )
 
   const drawer = (
     <>
@@ -102,6 +127,16 @@ export function CartDrawer({ open, onClose, items, onRemove }) {
           )}
         </div>
         <div className="shrink-0 border-t border-white/10 bg-background-dark/40 p-4">
+          {items.length > 0 ? (
+            <div className="mb-4 flex items-center justify-between gap-4">
+              <span className="text-sm font-semibold uppercase tracking-wider text-text-muted">
+                Total
+              </span>
+              <span className="font-display text-2xl font-bold text-white">
+                {formatUsd(totalUsd)}
+              </span>
+            </div>
+          ) : null}
           <ButtonPrimary type="button" className="w-full">
             Checkout
           </ButtonPrimary>
