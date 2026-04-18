@@ -2,12 +2,38 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react'
 import { CartDrawer } from '../components/layout/CartDrawer.jsx'
 
 const CartContext = createContext(null)
+
+const CART_STORAGE_KEY = 'hugen-beats-cart'
+
+function isValidCartLine(line) {
+  if (!line || typeof line !== 'object') return false
+  if (typeof line.lineId !== 'string') return false
+  if (!line.track || typeof line.track !== 'object') return false
+  if (typeof line.track.id !== 'string') return false
+  if (!line.plan || typeof line.plan !== 'object') return false
+  if (typeof line.plan.name !== 'string') return false
+  return true
+}
+
+function loadCartFromStorage() {
+  if (typeof window === 'undefined') return []
+  try {
+    const raw = window.localStorage.getItem(CART_STORAGE_KEY)
+    if (!raw) return []
+    const parsed = JSON.parse(raw)
+    if (!Array.isArray(parsed)) return []
+    return parsed.filter(isValidCartLine)
+  } catch {
+    return []
+  }
+}
 
 function newLineId(trackId) {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
@@ -18,7 +44,15 @@ function newLineId(trackId) {
 
 export function CartProvider({ children }) {
   const [open, setOpen] = useState(false)
-  const [items, setItems] = useState([])
+  const [items, setItems] = useState(loadCartFromStorage)
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items))
+    } catch {
+      // ignore quota / private mode errors
+    }
+  }, [items])
 
   const addToCart = useCallback((payload) => {
     const track = payload?.track
