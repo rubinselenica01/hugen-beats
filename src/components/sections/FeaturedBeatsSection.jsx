@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { BeatCard } from '../ui/BeatCard.jsx'
 import { MaterialIcon } from '../ui/MaterialIcon.jsx'
 import { SectionHeading } from '../ui/SectionHeading.jsx'
@@ -9,13 +10,13 @@ export function FeaturedBeatsSection({ beats, onSelectLicense }) {
         title="Featured Beats"
         subtitle="Latest drops and premium selections."
         action={
-          <a
+          <Link
             className="hidden items-center text-sm font-bold uppercase tracking-wider text-primary transition-colors duration-300 hover:text-white md:flex"
-            href="#"
+            to="/beats"
           >
             View All{' '}
             <MaterialIcon name="arrow_forward" className="ml-1 text-lg" />
-          </a>
+          </Link>
         }
       />
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">

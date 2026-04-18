@@ -2,9 +2,9 @@ const img = (id, w = 800, h = 600) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&h=${h}&q=80`
 
 export const navLinks = [
-  { href: '#beats', label: 'Beats' },
-  { href: '#beats', label: 'Licenses' },
-  { href: '#about', label: 'About' },
+  { to: '/beats', label: 'Beats' },
+  { to: '/#beats', label: 'Licenses' },
+  { to: '/#about', label: 'About' },
 ]
 
 export const hero = {
@@ -106,6 +106,188 @@ export const featuredBeats = [
     ],
   },
 ]
+
+const catalogBeatsExtra = [
+  {
+    id: '5',
+    title: 'Chrome Static',
+    meta: '150 BPM · Hip-Hop',
+    price: '$28',
+    image: img('1514525253161-7a46d19cd819', 600, 600),
+    alt: 'Chrome Static artwork',
+    description:
+      'Metallic hi-hats, wide stereo keys, and a pocket that stays locked for double-time flows.',
+    tags: ['#HipHop', '#Wide', '#Hooks'],
+    licenseEyebrow: 'License',
+    plans: [
+      { name: 'Basic Lease', price: '$28', detail: 'MP3' },
+      {
+        variant: 'popular',
+        name: 'Premium Lease',
+        price: '$78',
+        detail: 'WAV + Stems',
+        badge: 'Popular',
+      },
+    ],
+  },
+  {
+    id: '6',
+    title: 'Low Tide',
+    meta: '95 BPM · Lo-Fi',
+    price: '$26',
+    image: img('1511671782779-c97d3d27a1d4', 600, 600),
+    alt: 'Low Tide artwork',
+    description:
+      'Dusty drums, soft Rhodes, and tape-style saturation—head-nod grooves for late sessions.',
+    tags: ['#LoFi', '#Chill', '#Tape'],
+    licenseEyebrow: 'License',
+    plans: [
+      { name: 'Basic Lease', price: '$26', detail: 'MP3' },
+      {
+        variant: 'popular',
+        name: 'Premium Lease',
+        price: '$72',
+        detail: 'WAV + Stems',
+        badge: 'Popular',
+      },
+    ],
+  },
+  {
+    id: '7',
+    title: 'Signal Bloom',
+    meta: '138 BPM · Future Bass',
+    price: '$34',
+    image: img('1498038422601-82a377107fcd', 600, 600),
+    alt: 'Signal Bloom artwork',
+    description:
+      'Lush supersaws, tuned 808 slides, and airy tops—built for drops that open up the room.',
+    tags: ['#FutureBass', '#Bright', '#Drop'],
+    licenseEyebrow: 'License',
+    plans: [
+      { name: 'Basic Lease', price: '$34', detail: 'MP3' },
+      {
+        variant: 'popular',
+        name: 'Premium Lease',
+        price: '$88',
+        detail: 'WAV + Stems',
+        badge: 'Popular',
+      },
+    ],
+  },
+  {
+    id: '8',
+    title: 'Basement Echo',
+    meta: '88 BPM · Boom Bap',
+    price: '$30',
+    image: img('1470229530311-64f71b6e6f04', 600, 600),
+    alt: 'Basement Echo artwork',
+    description:
+      'Crisp snares, grimy bass, and vinyl crackle—classic pocket with modern clarity.',
+    tags: ['#BoomBap', '#Grimy', '#Classic'],
+    licenseEyebrow: 'License',
+    plans: [
+      { name: 'Basic Lease', price: '$30', detail: 'MP3' },
+      {
+        variant: 'popular',
+        name: 'Premium Lease',
+        price: '$80',
+        detail: 'WAV + Stems',
+        badge: 'Popular',
+      },
+    ],
+  },
+  {
+    id: '9',
+    title: 'Aurora Keys',
+    meta: '120 BPM · Pop',
+    price: '$36',
+    image: img('1516450760-636588e2f58b', 600, 600),
+    alt: 'Aurora Keys artwork',
+    description:
+      'Bright piano stacks, tight kicks, and hook-friendly lifts—radio-ready without sounding flat.',
+    tags: ['#Pop', '#Bright', '#Hooks'],
+    licenseEyebrow: 'License',
+    plans: [
+      { name: 'Basic Lease', price: '$36', detail: 'MP3' },
+      {
+        variant: 'popular',
+        name: 'Premium Lease',
+        price: '$92',
+        detail: 'WAV + Stems',
+        badge: 'Popular',
+      },
+    ],
+  },
+  {
+    id: '10',
+    title: 'Night Freight',
+    meta: '145 BPM · Drill',
+    price: '$33',
+    image: img('1516280440614-37939bbacd81', 600, 600),
+    alt: 'Night Freight artwork',
+    description:
+      'Sliding 808s, icy percs, and dark pads—space for ad-libs and aggressive cadences.',
+    tags: ['#Drill', '#Dark', '#808'],
+    licenseEyebrow: 'License',
+    plans: [
+      { name: 'Basic Lease', price: '$33', detail: 'MP3' },
+      {
+        variant: 'popular',
+        name: 'Premium Lease',
+        price: '$86',
+        detail: 'WAV + Stems',
+        badge: 'Popular',
+      },
+    ],
+  },
+  {
+    id: '11',
+    title: 'Soft Circuit',
+    meta: '102 BPM · Alt R&B',
+    price: '$38',
+    image: img('1511379938547-c1f69419868d', 600, 600),
+    alt: 'Soft Circuit artwork',
+    description:
+      'Muted guitars, saturated drums, and airy textures—melodic lanes with room to breathe.',
+    tags: ['#AltR&B', '#Texture', '#Melodic'],
+    licenseEyebrow: 'License',
+    plans: [
+      { name: 'Basic Lease', price: '$38', detail: 'MP3' },
+      {
+        variant: 'popular',
+        name: 'Premium Lease',
+        price: '$94',
+        detail: 'WAV + Stems',
+        badge: 'Popular',
+      },
+    ],
+  },
+  {
+    id: '12',
+    title: 'Pulse Atlas',
+    meta: '174 BPM · Drum & Bass',
+    price: '$31',
+    image: img('1514320291840-2e0a9bf2a9ae', 600, 600),
+    alt: 'Pulse Atlas artwork',
+    description:
+      'Rolling breaks, reese bass movement, and crisp highs—energy without harshness.',
+    tags: ['#DnB', '#Energy', '#Roll'],
+    licenseEyebrow: 'License',
+    plans: [
+      { name: 'Basic Lease', price: '$31', detail: 'MP3' },
+      {
+        variant: 'popular',
+        name: 'Premium Lease',
+        price: '$84',
+        detail: 'WAV + Stems',
+        badge: 'Popular',
+      },
+    ],
+  },
+]
+
+/** Full catalog for the beats listing page (includes featured tracks). */
+export const beatsCatalog = [...featuredBeats, ...catalogBeatsExtra]
 
 export const customComposition = {
   eyebrow: 'Custom work',

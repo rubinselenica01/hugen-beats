@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { LogoMark, LogoWordmark } from '../brand/Logo.jsx'
 import { ButtonPrimarySm } from '../ui/Button.jsx'
 
@@ -11,23 +12,23 @@ export function TopNav({ links, cartCount = 0 }) {
         <div className="flex flex-1 justify-center py-0">
           <div className="layout-content-container flex w-full flex-1 flex-col">
             <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-nav-border bg-background-dark/80 px-10 py-4 backdrop-blur-md">
-              <a
-                href="#"
+              <Link
+                to="/"
                 className="flex cursor-pointer items-center gap-4 text-white transition-opacity hover:opacity-80"
               >
                 <LogoMark />
                 <LogoWordmark />
-              </a>
+              </Link>
               <div className="flex flex-1 justify-end gap-8">
                 <nav className="hidden items-center gap-9 sm:flex">
-                  {links.map(({ href, label }) => (
-                    <a
-                      key={href}
-                      href={href}
+                  {links.map(({ to, label }) => (
+                    <Link
+                      key={to}
+                      to={to}
                       className="text-sm font-medium leading-normal text-white transition-colors duration-300 hover:text-primary"
                     >
                       {label}
-                    </a>
+                    </Link>
                   ))}
                 </nav>
                 <ButtonPrimarySm type="button">
