@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --top-nav-height: 4.5rem;
+  }
+
   body {
     @apply scrollbar-app m-0 min-h-screen bg-background-dark font-body text-text-main antialiased;
   }
@@ -15,7 +19,7 @@
 @layer components {
   /* Shared layout shell — reuse on every page */
   .page-shell {
-    @apply flex min-h-screen flex-col overflow-x-hidden;
+    @apply flex min-h-screen flex-col overflow-x-hidden pt-[var(--top-nav-height)];
   }
 
   .page-container {

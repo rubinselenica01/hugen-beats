@@ -19,7 +19,7 @@ export function HeroSection({ title, subtitle, backgroundImage }) {
   return (
     <section
       id="hero"
-      className="relative flex min-h-[calc(100dvh-5rem)] w-full flex-col items-center justify-center overflow-hidden bg-background-dark px-6"
+      className="relative flex min-h-[calc(100dvh-var(--top-nav-height))] w-full flex-col items-center justify-center overflow-hidden bg-background-dark px-6"
     >
       <div className="absolute inset-0 z-0">
         <div

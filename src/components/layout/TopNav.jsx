@@ -16,7 +16,7 @@ export function TopNav({ links }) {
 
   return (
     <div
-      className="group/design-root sticky top-0 z-50 flex h-auto w-full flex-col bg-nav"
+      className="group/design-root fixed inset-x-0 top-0 z-50 flex min-h-[var(--top-nav-height)] w-full flex-col bg-nav"
       style={{ fontFamily: 'Inter, Noto Sans, sans-serif' }}
     >
       <div className="layout-container flex h-full grow flex-col">
