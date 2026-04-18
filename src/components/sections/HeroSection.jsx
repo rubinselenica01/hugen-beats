@@ -49,11 +49,13 @@ export function HeroSection({ title, subtitle, backgroundImage }) {
           </ButtonOutline>
         </div>
       </div>
-      <div className="absolute bottom-10 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 opacity-50 animate-bounce">
-        <span className="text-xs font-semibold uppercase tracking-widest text-text-muted">
-          Scroll
-        </span>
-        <MaterialIcon name="expand_more" className="text-text-muted" />
+      <div className="pointer-events-none absolute bottom-4 left-1/2 z-10 -translate-x-1/2 sm:bottom-8">
+        <div className="flex flex-col items-center gap-2 opacity-50 animate-bounce">
+          <span className="text-xs font-semibold uppercase tracking-widest text-text-muted">
+            Scroll
+          </span>
+          <MaterialIcon name="expand_more" className="text-text-muted" />
+        </div>
       </div>
     </section>
   )
