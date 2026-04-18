@@ -1,10 +1,18 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useCart } from '../../context/CartContext.jsx'
 import { LogoMark, LogoWordmark } from '../brand/Logo.jsx'
 import { ButtonPrimarySm } from '../ui/Button.jsx'
 
+/** e.g. "/#beats" -> "beats" */
+function hashIdFromHomeHashLink(to) {
+  if (typeof to !== 'string') return null
+  const m = to.match(/^\/#(.+)$/)
+  return m ? m[1] : null
+}
+
 export function TopNav({ links }) {
   const { openCart, cartCount } = useCart()
+  const location = useLocation()
 
   return (
     <div
@@ -26,9 +34,25 @@ export function TopNav({ links }) {
                 <nav className="hidden items-center gap-9 sm:flex">
                   {links.map(({ to, label }) => (
                     <Link
-                      key={to}
+                      key={label}
                       to={to}
                       className="text-sm font-medium leading-normal text-white transition-colors duration-300 hover:text-primary"
+                      onClick={(e) => {
+                        const id = hashIdFromHomeHashLink(to)
+                        if (!id) return
+                        if (
+                          location.pathname === '/' &&
+                          location.hash === `#${id}`
+                        ) {
+                          e.preventDefault()
+                          document
+                            .getElementById(id)
+                            ?.scrollIntoView({
+                              behavior: 'smooth',
+                              block: 'start',
+                            })
+                        }
+                      }}
                     >
                       {label}
                     </Link>

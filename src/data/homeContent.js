@@ -2,7 +2,7 @@ const img = (id, w = 800, h = 600) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&h=${h}&q=80`
 
 export const navLinks = [
-  { to: '/beats', label: 'Beats' },
+  { to: '/#beats', label: 'Beats' },
   { to: '/#beats', label: 'Licenses' },
   { to: '/#about', label: 'About' },
 ]

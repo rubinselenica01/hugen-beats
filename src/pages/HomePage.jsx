@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Footer } from '../components/layout/Footer.jsx'
 import { TopNav } from '../components/layout/TopNav.jsx'
 import { CustomCompositionSection } from '../components/sections/CustomCompositionSection.jsx'
@@ -17,6 +18,43 @@ import {
 
 export default function HomePage() {
   const [licenseTrack, setLicenseTrack] = useState(null)
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const id = location.hash?.replace(/^#/, '')
+    if (!id) return
+    const el = document.getElementById(id)
+    if (!el) return
+    const frame = window.requestAnimationFrame(() => {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+    return () => window.cancelAnimationFrame(frame)
+  }, [location.pathname, location.hash])
+
+  // Drop #beats / #about from the URL when the hero is the main view again, so refresh matches
+  // “I’m at the top” and shared links stay accurate.
+  useEffect(() => {
+    const hero = document.getElementById('hero')
+    if (!hero) return
+
+    const started = Date.now()
+    const ignoreMs = 900
+
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (Date.now() - started < ignoreMs) return
+        if (!entry?.isIntersecting) return
+        if (entry.intersectionRatio < 0.5) return
+        if (!window.location.hash) return
+        navigate({ pathname: '/', hash: '' }, { replace: true })
+      },
+      { threshold: [0, 0.25, 0.5, 0.75, 1] },
+    )
+
+    obs.observe(hero)
+    return () => obs.disconnect()
+  }, [navigate])
 
   return (
     <div className="page-shell">

@@ -3,7 +3,10 @@ import { MaterialIcon } from '../ui/MaterialIcon.jsx'
 
 export function HeroSection({ title, subtitle, backgroundImage }) {
   return (
-    <section className="relative flex min-h-[calc(100dvh-5rem)] w-full flex-col items-center justify-center overflow-hidden bg-background-dark px-6">
+    <section
+      id="hero"
+      className="relative flex min-h-[calc(100dvh-5rem)] w-full flex-col items-center justify-center overflow-hidden bg-background-dark px-6"
+    >
       <div className="absolute inset-0 z-0">
         <div
           className="absolute inset-0 scale-105 bg-cover bg-center opacity-30"
