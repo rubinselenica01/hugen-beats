@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom'
+import { useCart } from '../../context/CartContext.jsx'
 import { LogoMark, LogoWordmark } from '../brand/Logo.jsx'
 import { ButtonPrimarySm } from '../ui/Button.jsx'
 
-export function TopNav({ links, cartCount = 0 }) {
+export function TopNav({ links }) {
+  const { openCart, cartCount } = useCart()
+
   return (
     <div
       className="group/design-root sticky top-0 z-50 flex h-auto w-full flex-col bg-nav"
@@ -31,7 +34,7 @@ export function TopNav({ links, cartCount = 0 }) {
                     </Link>
                   ))}
                 </nav>
-                <ButtonPrimarySm type="button">
+                <ButtonPrimarySm type="button" onClick={openCart}>
                   <span className="truncate">Cart ({cartCount})</span>
                 </ButtonPrimarySm>
               </div>

@@ -20,7 +20,7 @@ export default function HomePage() {
 
   return (
     <div className="page-shell">
-      <TopNav links={navLinks} cartCount={0} />
+      <TopNav links={navLinks} />
       <main className="flex w-full flex-1 flex-col items-center">
         <HeroSection
           title={hero.title}

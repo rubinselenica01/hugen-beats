@@ -1,6 +1,4 @@
-/**
- * Spotlight-style license card (same layout as the former SpotlightSection).
- */
+/** Spotlight-style license card (same layout as the former SpotlightSection). */
 export function SpotlightLicenseCard({
   title,
   description,
@@ -9,7 +7,11 @@ export function SpotlightLicenseCard({
   alt,
   plans,
   eyebrow = 'License',
+  selectedPlanName = null,
+  onSelectPlan,
 }) {
+  const selectable = typeof onSelectPlan === 'function'
+
   return (
     <div className="relative flex w-full flex-col overflow-hidden rounded-lg border border-white/5 bg-surface shadow-2xl lg:flex-row">
       <div className="pointer-events-none absolute left-0 top-1/2 h-96 w-96 -translate-y-1/2 rounded-full bg-primary/10 blur-[100px]" />
@@ -51,18 +53,69 @@ export function SpotlightLicenseCard({
           {title}
         </h2>
         <p className="mb-6 text-base text-text-muted sm:text-lg">{description}</p>
-        <div className="flex flex-col gap-4 sm:flex-row">
-          {plans.map((plan) =>
-            plan.variant === 'popular' ? (
+        <div
+          className="flex flex-col gap-4 sm:flex-row"
+          role={selectable ? 'radiogroup' : undefined}
+          aria-label={selectable ? 'License type' : undefined}
+        >
+          {plans.map((plan) => {
+            const isSelected = selectable && selectedPlanName === plan.name
+            const popular = plan.variant === 'popular'
+            const popularBase =
+              'group relative flex flex-1 flex-col overflow-hidden rounded-md border-2 p-4 text-left transition-all duration-300'
+            const popularIdle =
+              'border-primary/30 bg-primary/5 hover:border-primary hover:bg-primary/10'
+            const popularSelected =
+              'border-primary bg-primary/15 shadow-[0_0_0_1px_rgba(27,187,131,0.5)] ring-2 ring-primary/40'
+            const basicBase =
+              'group flex flex-1 flex-col rounded-md border p-4 text-left transition-all duration-300'
+            const basicIdle =
+              'border-white/10 bg-white/5 hover:border-primary/50 hover:bg-white/10'
+            const basicSelected =
+              'border-primary bg-primary/10 ring-2 ring-primary/30'
+
+            if (popular) {
+              return (
+                <button
+                  key={plan.name}
+                  type="button"
+                  onClick={() => selectable && onSelectPlan(plan)}
+                  role={selectable ? 'radio' : undefined}
+                  aria-checked={selectable ? isSelected : undefined}
+                  className={`${popularBase} ${
+                    isSelected ? popularSelected : popularIdle
+                  } ${selectable ? 'cursor-pointer' : ''}`}
+                >
+                  <div className="absolute right-0 top-0 rounded-bl-sm bg-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-background-dark">
+                    {plan.badge}
+                  </div>
+                  <span className="mb-1 text-sm font-bold uppercase tracking-wider text-primary">
+                    {plan.name}
+                  </span>
+                  <div className="flex w-full items-end justify-between">
+                    <span className="text-2xl font-bold text-white">{plan.price}</span>
+                    <span className="text-xs text-text-muted">{plan.detail}</span>
+                  </div>
+                </button>
+              )
+            }
+
+            return (
               <button
                 key={plan.name}
                 type="button"
-                className="group relative flex flex-1 flex-col overflow-hidden rounded-md border-2 border-primary/30 bg-primary/5 p-4 text-left transition-all duration-300 hover:border-primary hover:bg-primary/10"
+                onClick={() => selectable && onSelectPlan(plan)}
+                role={selectable ? 'radio' : undefined}
+                aria-checked={selectable ? isSelected : undefined}
+                className={`${basicBase} ${
+                  isSelected ? basicSelected : basicIdle
+                } ${selectable ? 'cursor-pointer' : ''}`}
               >
-                <div className="absolute right-0 top-0 rounded-bl-sm bg-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-background-dark">
-                  {plan.badge}
-                </div>
-                <span className="mb-1 text-sm font-bold uppercase tracking-wider text-primary">
+                <span
+                  className={`mb-1 text-sm font-bold uppercase tracking-wider transition-colors ${
+                    isSelected ? 'text-primary' : 'text-text-muted group-hover:text-white'
+                  }`}
+                >
                   {plan.name}
                 </span>
                 <div className="flex w-full items-end justify-between">
@@ -70,22 +123,8 @@ export function SpotlightLicenseCard({
                   <span className="text-xs text-text-muted">{plan.detail}</span>
                 </div>
               </button>
-            ) : (
-              <button
-                key={plan.name}
-                type="button"
-                className="group flex flex-1 flex-col rounded-md border border-white/10 bg-white/5 p-4 text-left transition-all duration-300 hover:border-primary/50 hover:bg-white/10"
-              >
-                <span className="mb-1 text-sm font-bold uppercase tracking-wider text-text-muted transition-colors group-hover:text-white">
-                  {plan.name}
-                </span>
-                <div className="flex w-full items-end justify-between">
-                  <span className="text-2xl font-bold text-white">{plan.price}</span>
-                  <span className="text-xs text-text-muted">{plan.detail}</span>
-                </div>
-              </button>
-            ),
-          )}
+            )
+          })}
         </div>
       </div>
     </div>

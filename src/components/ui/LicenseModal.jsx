@@ -1,8 +1,16 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { useCart } from '../../context/CartContext.jsx'
 import { SpotlightLicenseCard } from './SpotlightLicenseCard.jsx'
 
-export function LicenseModal({ open, onClose, track, onAddToCart }) {
+export function LicenseModal({ open, onClose, track }) {
+  const { addToCart } = useCart()
+  const [selectedPlanName, setSelectedPlanName] = useState(null)
+
+  useEffect(() => {
+    if (open && track) setSelectedPlanName(null)
+  }, [open, track?.id])
+
   useEffect(() => {
     if (!open) return
     const prev = document.body.style.overflow
@@ -33,6 +41,8 @@ export function LicenseModal({ open, onClose, track, onAddToCart }) {
     licenseEyebrow,
   } = track
 
+  const selectedPlan = plans.find((p) => p.name === selectedPlanName)
+
   const modal = (
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm"
@@ -56,13 +66,22 @@ export function LicenseModal({ open, onClose, track, onAddToCart }) {
         </button>
         <button
           type="button"
+          disabled={!selectedPlan}
           onClick={(e) => {
             e.stopPropagation()
-            onAddToCart?.(track)
+            if (!selectedPlan) return
+            addToCart({ track, plan: selectedPlan })
+            onClose()
           }}
-          className="absolute bottom-4 right-4 z-[110] flex h-11 w-11 items-center justify-center rounded-full bg-primary text-background-dark shadow-glow transition-all hover:scale-105 hover:bg-primary-hover"
+          className={`absolute bottom-4 right-4 z-[110] flex h-11 w-11 items-center justify-center rounded-full text-background-dark shadow-glow transition-all ${
+            selectedPlan
+              ? 'bg-primary hover:scale-105 hover:bg-primary-hover'
+              : 'cursor-not-allowed bg-primary/35 opacity-50'
+          }`}
           aria-label="Add to cart"
-          title="Add to cart"
+          title={
+            selectedPlan ? 'Add to cart' : 'Select a license type first'
+          }
         >
           <span
             className="material-symbols-outlined text-[22px]"
@@ -79,6 +98,8 @@ export function LicenseModal({ open, onClose, track, onAddToCart }) {
           alt={alt}
           plans={plans}
           eyebrow={licenseEyebrow ?? 'License'}
+          selectedPlanName={selectedPlanName}
+          onSelectPlan={(plan) => setSelectedPlanName(plan.name)}
         />
       </div>
     </div>

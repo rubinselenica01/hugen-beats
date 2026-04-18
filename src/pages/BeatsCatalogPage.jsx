@@ -11,7 +11,7 @@ export default function BeatsCatalogPage() {
 
   return (
     <div className="page-shell">
-      <TopNav links={navLinks} cartCount={0} />
+      <TopNav links={navLinks} />
       <main className="relative flex w-full flex-1 flex-col items-center bg-gradient-to-b from-nav via-background-dark to-background-dark">
         <div
           className="pointer-events-none absolute inset-0 opacity-40"
