@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { SpotlightLicenseCard } from './SpotlightLicenseCard.jsx'
 
 export function LicenseModal({ open, onClose, track, onAddToCart }) {
@@ -32,7 +33,7 @@ export function LicenseModal({ open, onClose, track, onAddToCart }) {
     licenseEyebrow,
   } = track
 
-  return (
+  const modal = (
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm"
       role="presentation"
@@ -82,4 +83,6 @@ export function LicenseModal({ open, onClose, track, onAddToCart }) {
       </div>
     </div>
   )
+
+  return createPortal(modal, document.body)
 }
