@@ -10,7 +10,7 @@ import { CartDrawer } from '../components/layout/CartDrawer.jsx'
 
 const CartContext = createContext(null)
 
-const CART_STORAGE_KEY = 'hugen-beats-cart'
+const CART_STORAGE_KEY = 'hugen-music-cart'
 
 function isValidCartLine(line) {
   if (!line || typeof line !== 'object') return false

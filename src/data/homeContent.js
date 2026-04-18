@@ -1,5 +1,22 @@
+import { producerBrand } from '../producerBrand.js'
+
 const img = (id, w = 800, h = 600) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&h=${h}&q=80`
+
+/** Footer contact & socials — override via `.env` (see `.env.example`). */
+const footerValues = {
+  email:
+    import.meta.env.VITE_CONTACT_EMAIL ?? 'hello@hugenmusic.example',
+  youtube:
+    import.meta.env.VITE_SOCIAL_YOUTUBE ??
+    'https://www.youtube.com/@hugenmusic',
+  spotify:
+    import.meta.env.VITE_SOCIAL_SPOTIFY ??
+    'https://open.spotify.com/artist/61zp7kZ3ICWnbroQhCH6KB?si=ZaGsW-n4Q6qrtwefrvp4Bw&nd=1&dlsi=4ed240a00618455c',
+  instagram:
+    import.meta.env.VITE_SOCIAL_INSTAGRAM ??
+    'https://www.instagram.com/hugenmusic',
+}
 
 export const navLinks = [
   { to: '/#beats', label: 'Beats' },
@@ -13,7 +30,7 @@ export const navLinksCatalog = [
 ]
 
 export const hero = {
-  title: 'HUGEN BEATS',
+  title: producerBrand,
   subtitle: [
     'Immersive production for artists who want depth, clarity, and motion.',
     'Stream, license, or build something custom.',
@@ -340,13 +357,13 @@ export const about = {
 }
 
 export const footer = {
-  email: 'hello@hugenbeats.example',
+  email: footerValues.email,
   location: 'Remote · Worldwide',
-  legal: '©2026 HUGEN BEATS. All rights reserved.',
+  legal: `©2026 ${producerBrand.toUpperCase()}. All rights reserved.`,
   developerCredit: '',
   socialLinks: [
-    { label: 'YouTube', href: 'https://www.youtube.com/' },
-    { label: 'Spotify', href: 'https://open.spotify.com/' },
-    { label: 'Instagram', href: 'https://www.instagram.com/' },
+    { label: 'YouTube', href: footerValues.youtube },
+    { label: 'Spotify', href: footerValues.spotify },
+    { label: 'Instagram', href: footerValues.instagram },
   ],
 }

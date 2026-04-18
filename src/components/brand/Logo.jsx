@@ -1,3 +1,5 @@
+import { producerBrand } from '../../producerBrand.js'
+
 export function LogoMark({ className = 'size-6 text-primary' }) {
   return (
     <svg
@@ -18,9 +20,9 @@ export function LogoMark({ className = 'size-6 text-primary' }) {
 export function LogoWordmark({ className = '' }) {
   return (
     <h2
-      className={`font-display text-xl font-black leading-tight tracking-tight text-white ${className}`}
+      className={`font-display text-xl font-black uppercase leading-tight tracking-tight text-white ${className}`}
     >
-      HUGEN BEATS
+      {producerBrand}
     </h2>
   )
 }

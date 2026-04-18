@@ -1,3 +1,4 @@
+import { producerBrand } from '../../producerBrand.js'
 import { LogoMark } from '../brand/Logo.jsx'
 
 export function Footer({
@@ -46,7 +47,7 @@ export function Footer({
             <div className="flex items-center gap-3 text-white">
               <LogoMark className="size-5 text-primary" />
               <span className="font-display text-lg font-bold uppercase tracking-tight">
-                HUGEN BEATS
+                {producerBrand}
               </span>
             </div>
             <div className="text-center text-sm text-text-muted md:text-right">
