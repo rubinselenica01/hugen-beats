@@ -42,6 +42,16 @@ function newLineId(trackId) {
   return `${trackId}-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`
 }
 
+/** Same track + same license plan = one cart line (stable when `track.id` comes from any API). */
+export function cartLineKey(track, plan) {
+  if (!track?.id || !plan?.name) return ''
+  return `${String(track.id)}|${String(plan.name)}`
+}
+
+function lineMatchesTrackAndPlan(line, track, plan) {
+  return cartLineKey(line.track, line.plan) === cartLineKey(track, plan)
+}
+
 export function CartProvider({ children }) {
   const [open, setOpen] = useState(false)
   const [items, setItems] = useState(loadCartFromStorage)
@@ -58,12 +68,26 @@ export function CartProvider({ children }) {
     const track = payload?.track
     const plan = payload?.plan
     if (!track || !plan) return
-    setItems((prev) => [
-      ...prev,
-      { lineId: newLineId(track.id), track, plan },
-    ])
+
+    setItems((prev) => {
+      if (prev.some((line) => lineMatchesTrackAndPlan(line, track, plan))) {
+        return prev
+      }
+      return [
+        ...prev,
+        { lineId: newLineId(track.id), track, plan },
+      ]
+    })
     setOpen(true)
   }, [])
+
+  const isInCart = useCallback(
+    (track, plan) => {
+      if (!track?.id || !plan?.name) return false
+      return items.some((line) => lineMatchesTrackAndPlan(line, track, plan))
+    },
+    [items],
+  )
 
   const removeFromCart = useCallback((lineId) => {
     setItems((prev) => prev.filter((line) => line.lineId !== lineId))
@@ -74,11 +98,12 @@ export function CartProvider({ children }) {
       openCart: () => setOpen(true),
       closeCart: () => setOpen(false),
       addToCart,
+      isInCart,
       removeFromCart,
       items,
       cartCount: items.length,
     }),
-    [items, addToCart, removeFromCart],
+    [items, addToCart, isInCart, removeFromCart],
   )
 
   return (
