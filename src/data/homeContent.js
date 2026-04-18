@@ -7,6 +7,11 @@ export const navLinks = [
   { to: '/#about', label: 'About' },
 ]
 
+/** Top nav on /beats — omits home-only anchors (featured beats, about). */
+export const navLinksCatalog = [
+  { to: '/#beats', label: 'Licenses' },
+]
+
 export const hero = {
   title: 'HUGEN BEATS',
   subtitle: [

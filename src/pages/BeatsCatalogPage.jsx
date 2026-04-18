@@ -4,14 +4,14 @@ import { TopNav } from '../components/layout/TopNav.jsx'
 import { LicenseModal } from '../components/ui/LicenseModal.jsx'
 import { BeatCard } from '../components/ui/BeatCard.jsx'
 import { SectionHeading } from '../components/ui/SectionHeading.jsx'
-import { beatsCatalog, footer, navLinks } from '../data/homeContent.js'
+import { beatsCatalog, footer, navLinksCatalog } from '../data/homeContent.js'
 
 export default function BeatsCatalogPage() {
   const [licenseTrack, setLicenseTrack] = useState(null)
 
   return (
     <div className="page-shell">
-      <TopNav links={navLinks} />
+      <TopNav links={navLinksCatalog} />
       <main className="relative flex w-full flex-1 flex-col items-center bg-gradient-to-b from-nav via-background-dark to-background-dark">
         <div
           className="pointer-events-none absolute inset-0 opacity-40"
