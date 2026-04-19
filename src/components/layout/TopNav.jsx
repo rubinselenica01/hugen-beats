@@ -4,7 +4,7 @@ import { licensesOverlayContent } from '../../data/homeContent.js'
 import { scrollElementBelowNav } from '../../utils/scrollToAnchor.js'
 import { useCart } from '../../context/CartContext.jsx'
 import { LogoMark, LogoWordmark } from '../brand/Logo.jsx'
-import { ButtonPrimarySm } from '../ui/Button.jsx'
+import { MaterialIcon } from '../ui/MaterialIcon.jsx'
 import { LicensesOverlay } from './LicensesOverlay.jsx'
 
 /** e.g. "/#beats" -> "beats" */
@@ -75,9 +75,23 @@ export function TopNav({ links }) {
                     ),
                   )}
                 </nav>
-                <ButtonPrimarySm type="button" onClick={openCart}>
-                  <span className="truncate">Cart ({cartCount})</span>
-                </ButtonPrimarySm>
+                <button
+                  type="button"
+                  onClick={openCart}
+                  className="relative inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-background-dark transition-transform hover:scale-105"
+                  aria-label={
+                    cartCount > 0
+                      ? `Open shopping cart, ${cartCount} items`
+                      : 'Open shopping cart'
+                  }
+                >
+                  <MaterialIcon name="shopping_cart" className="text-[22px]" filled />
+                  {cartCount > 0 ? (
+                    <span className="absolute -right-0.5 -top-0.5 flex h-[1.125rem] min-w-[1.125rem] items-center justify-center rounded-full bg-background-dark px-0.5 text-[10px] font-bold leading-none text-primary ring-2 ring-primary">
+                      {cartCount > 99 ? '99+' : cartCount}
+                    </span>
+                  ) : null}
+                </button>
               </div>
             </header>
           </div>
