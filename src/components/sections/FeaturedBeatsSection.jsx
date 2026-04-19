@@ -14,7 +14,7 @@ export function FeaturedBeatsSection({ beats, onSelectLicense }) {
         subtitle="Latest drops and premium selections."
       />
       <div
-        className="-mx-8 flex flex-nowrap gap-4 overflow-x-auto overflow-y-visible px-8 pb-2 [-ms-overflow-style:none] [scrollbar-width:none] snap-x snap-mandatory sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0 sm:snap-none lg:grid-cols-4 lg:gap-8 [&::-webkit-scrollbar]:hidden"
+        className="-mx-8 flex flex-nowrap gap-4 overflow-x-auto px-8 pb-2 pt-3 [-ms-overflow-style:none] [scrollbar-width:none] snap-x snap-mandatory sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0 sm:pt-0 sm:snap-none lg:grid-cols-4 lg:gap-8 [&::-webkit-scrollbar]:hidden"
         style={{ WebkitOverflowScrolling: 'touch' }}
       >
         {beats.map((beat) => (
