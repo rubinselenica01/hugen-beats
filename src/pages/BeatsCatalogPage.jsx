@@ -30,6 +30,7 @@ export default function BeatsCatalogPage() {
             {beatsCatalog.map((beat) => (
               <BeatCard
                 key={beat.id}
+                compact
                 title={beat.title}
                 meta={beat.meta}
                 price={beat.price}
