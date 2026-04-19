@@ -6,12 +6,13 @@ import { SectionHeading } from '../ui/SectionHeading.jsx'
 export function FeaturedBeatsSection({ beats, onSelectLicense }) {
   return (
     <section
-      className="page-container flex w-full max-w-[1440px] flex-col gap-8 py-24"
+      className="page-container flex w-full max-w-[1440px] flex-col gap-5 pt-10 pb-16 sm:gap-8 sm:pt-16 sm:pb-20 md:py-24"
       id="beats"
     >
       <SectionHeading
         title="Featured Beats"
         subtitle="Latest drops and premium selections."
+        className="!pb-4 sm:!pb-6"
       />
       <div
         className="-mx-8 flex flex-nowrap gap-4 overflow-x-auto px-8 pb-2 pt-3 [-ms-overflow-style:none] [scrollbar-width:none] snap-x snap-mandatory sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0 sm:pt-0 sm:snap-none lg:grid-cols-4 lg:gap-8 [&::-webkit-scrollbar]:hidden"
@@ -34,7 +35,7 @@ export function FeaturedBeatsSection({ beats, onSelectLicense }) {
           </div>
         ))}
       </div>
-      <div className="flex justify-center border-t border-surface-hover pt-6">
+      <div className="flex justify-center border-t border-surface-hover pt-4 sm:pt-6">
         <Link
           className="inline-flex items-center text-sm font-bold uppercase tracking-wider text-primary transition-colors duration-300 hover:text-white"
           to="/beats"

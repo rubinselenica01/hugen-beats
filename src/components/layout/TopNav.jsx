@@ -31,51 +31,54 @@ export function TopNav({ links }) {
       <div className="layout-container flex h-full grow flex-col">
         <div className="flex flex-1 justify-center py-0">
           <div className="layout-content-container flex w-full flex-1 flex-col">
-            <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-nav-border bg-background-dark/80 px-10 py-4 backdrop-blur-md">
+            <header className="grid w-full grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-x-2 whitespace-nowrap border-b border-solid border-nav-border bg-background-dark/80 px-4 py-4 backdrop-blur-md sm:gap-x-4 sm:px-10">
               <Link
                 to="/"
-                className="flex cursor-pointer items-center gap-4 text-white transition-opacity hover:opacity-80"
+                className="flex min-w-0 cursor-pointer items-center gap-3 justify-self-start text-white transition-opacity hover:opacity-80 sm:gap-4"
               >
                 <LogoMark />
-                <LogoWordmark />
+                <LogoWordmark className="hidden sm:block" />
               </Link>
-              <div className="flex flex-1 justify-end gap-8">
-                <nav className="hidden items-center gap-9 sm:flex">
-                  {links.map(({ to, label, licensesOverlay }) =>
-                    licensesOverlay ? (
-                      <button
-                        key={label}
-                        type="button"
-                        className={navLinkClassName}
-                        onClick={() => setLicensesOpen(true)}
-                      >
-                        {label}
-                      </button>
-                    ) : (
-                      <Link
-                        key={label}
-                        to={to}
-                        className={navLinkClassName}
-                        onClick={(e) => {
-                          const id = hashIdFromHomeHashLink(to)
-                          if (!id) return
-                          if (
-                            location.pathname === '/' &&
-                            location.hash === `#${id}`
-                          ) {
-                            e.preventDefault()
-                            const target = document.getElementById(id)
-                            if (target) {
-                              scrollElementBelowNav(target, { behavior: 'smooth' })
-                            }
+              <nav
+                className="flex min-w-0 items-center justify-center gap-4 overflow-x-auto sm:gap-9 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                aria-label="Main"
+              >
+                {links.map(({ to, label, licensesOverlay }) =>
+                  licensesOverlay ? (
+                    <button
+                      key={label}
+                      type="button"
+                      className={`${navLinkClassName} shrink-0`}
+                      onClick={() => setLicensesOpen(true)}
+                    >
+                      {label}
+                    </button>
+                  ) : (
+                    <Link
+                      key={label}
+                      to={to}
+                      className={`${navLinkClassName} shrink-0`}
+                      onClick={(e) => {
+                        const id = hashIdFromHomeHashLink(to)
+                        if (!id) return
+                        if (
+                          location.pathname === '/' &&
+                          location.hash === `#${id}`
+                        ) {
+                          e.preventDefault()
+                          const target = document.getElementById(id)
+                          if (target) {
+                            scrollElementBelowNav(target, { behavior: 'smooth' })
                           }
-                        }}
-                      >
-                        {label}
-                      </Link>
-                    ),
-                  )}
-                </nav>
+                        }
+                      }}
+                    >
+                      {label}
+                    </Link>
+                  ),
+                )}
+              </nav>
+              <div className="flex justify-self-end">
                 <button
                   type="button"
                   onClick={openCart}
