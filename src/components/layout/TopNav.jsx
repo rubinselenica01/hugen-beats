@@ -24,6 +24,7 @@ export function TopNav({ links }) {
 
   return (
     <div
+      id="site-top-nav"
       className="group/design-root fixed inset-x-0 top-0 z-50 flex min-h-[var(--top-nav-height)] w-full flex-col bg-nav"
       style={{ fontFamily: 'Inter, Noto Sans, sans-serif' }}
     >

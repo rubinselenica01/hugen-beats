@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { createPortal } from 'react-dom'
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock.js'
 import { ButtonPrimary } from '../ui/Button.jsx'
 
 function parseUsdToNumber(value) {
@@ -19,14 +20,7 @@ function formatUsd(n) {
 }
 
 export function CartDrawer({ open, onClose, items, onRemove }) {
-  useEffect(() => {
-    if (!open) return
-    const prev = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.body.style.overflow = prev
-    }
-  }, [open])
+  useBodyScrollLock(open)
 
   useEffect(() => {
     if (!open) return

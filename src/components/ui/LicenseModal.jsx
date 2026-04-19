@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock.js'
 import { useCart } from '../../context/CartContext.jsx'
 import { SpotlightLicenseCard } from './SpotlightLicenseCard.jsx'
 
@@ -11,14 +12,7 @@ export function LicenseModal({ open, onClose, track }) {
     if (open && track) setSelectedPlanName(null)
   }, [open, track?.id])
 
-  useEffect(() => {
-    if (!open) return
-    const prev = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.body.style.overflow = prev
-    }
-  }, [open])
+  useBodyScrollLock(open && !!track)
 
   useEffect(() => {
     if (!open) return
