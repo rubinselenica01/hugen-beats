@@ -20,14 +20,23 @@ const footerValues = {
 
 export const navLinks = [
   { to: '/#beats', label: 'Beats' },
-  { to: '/#beats', label: 'Licenses' },
+  { to: '/#beats', label: 'Licenses', licensesOverlay: true },
   { to: '/#about', label: 'About' },
 ]
 
 /** Top nav on /beats — omits home-only anchors (featured beats, about). */
 export const navLinksCatalog = [
-  { to: '/#beats', label: 'Licenses' },
+  { to: '/#beats', label: 'Licenses', licensesOverlay: true },
 ]
+
+/** Copy shown when opening Licenses from the nav (blurred backdrop overlay). */
+export const licensesOverlayContent = {
+  title: 'Licenses',
+  paragraphs: [
+    'Every beat is offered under a non-exclusive lease. Pick a tier that matches your release—streaming MP3, full WAV, or stems for deeper mixes.',
+    'Need exclusive rights, film clearance, or custom terms? Use the contact details in the footer and we will align the paperwork with your project.',
+  ],
+}
 
 export const hero = {
   title: producerBrand,

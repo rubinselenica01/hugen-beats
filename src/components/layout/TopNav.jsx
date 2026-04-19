@@ -1,8 +1,11 @@
+import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { licensesOverlayContent } from '../../data/homeContent.js'
 import { scrollElementBelowNav } from '../../utils/scrollToAnchor.js'
 import { useCart } from '../../context/CartContext.jsx'
 import { LogoMark, LogoWordmark } from '../brand/Logo.jsx'
 import { ButtonPrimarySm } from '../ui/Button.jsx'
+import { LicensesOverlay } from './LicensesOverlay.jsx'
 
 /** e.g. "/#beats" -> "beats" */
 function hashIdFromHomeHashLink(to) {
@@ -11,9 +14,13 @@ function hashIdFromHomeHashLink(to) {
   return m ? m[1] : null
 }
 
+const navLinkClassName =
+  'text-sm font-medium leading-normal text-white transition-colors duration-300 hover:text-primary'
+
 export function TopNav({ links }) {
   const { openCart, cartCount } = useCart()
   const location = useLocation()
+  const [licensesOpen, setLicensesOpen] = useState(false)
 
   return (
     <div
@@ -33,29 +40,40 @@ export function TopNav({ links }) {
               </Link>
               <div className="flex flex-1 justify-end gap-8">
                 <nav className="hidden items-center gap-9 sm:flex">
-                  {links.map(({ to, label }) => (
-                    <Link
-                      key={label}
-                      to={to}
-                      className="text-sm font-medium leading-normal text-white transition-colors duration-300 hover:text-primary"
-                      onClick={(e) => {
-                        const id = hashIdFromHomeHashLink(to)
-                        if (!id) return
-                        if (
-                          location.pathname === '/' &&
-                          location.hash === `#${id}`
-                        ) {
-                          e.preventDefault()
-                          const target = document.getElementById(id)
-                          if (target) {
-                            scrollElementBelowNav(target, { behavior: 'smooth' })
+                  {links.map(({ to, label, licensesOverlay }) =>
+                    licensesOverlay ? (
+                      <button
+                        key={label}
+                        type="button"
+                        className={navLinkClassName}
+                        onClick={() => setLicensesOpen(true)}
+                      >
+                        {label}
+                      </button>
+                    ) : (
+                      <Link
+                        key={label}
+                        to={to}
+                        className={navLinkClassName}
+                        onClick={(e) => {
+                          const id = hashIdFromHomeHashLink(to)
+                          if (!id) return
+                          if (
+                            location.pathname === '/' &&
+                            location.hash === `#${id}`
+                          ) {
+                            e.preventDefault()
+                            const target = document.getElementById(id)
+                            if (target) {
+                              scrollElementBelowNav(target, { behavior: 'smooth' })
+                            }
                           }
-                        }
-                      }}
-                    >
-                      {label}
-                    </Link>
-                  ))}
+                        }}
+                      >
+                        {label}
+                      </Link>
+                    ),
+                  )}
                 </nav>
                 <ButtonPrimarySm type="button" onClick={openCart}>
                   <span className="truncate">Cart ({cartCount})</span>
@@ -65,6 +83,12 @@ export function TopNav({ links }) {
           </div>
         </div>
       </div>
+      <LicensesOverlay
+        open={licensesOpen}
+        onClose={() => setLicensesOpen(false)}
+        title={licensesOverlayContent.title}
+        paragraphs={licensesOverlayContent.paragraphs}
+      />
     </div>
   )
 }
