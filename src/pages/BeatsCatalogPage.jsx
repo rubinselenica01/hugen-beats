@@ -6,6 +6,21 @@ import { BeatCard } from '../components/ui/BeatCard.jsx'
 import { SectionHeading } from '../components/ui/SectionHeading.jsx'
 import { beatsCatalog, footer, navLinksCatalog } from '../data/homeContent.js'
 
+const CARDS_PER_MOBILE_ROW = 4
+
+/** Same max width as home featured beats — keeps cards one consistent size */
+const beatCardShellClass = 'w-full min-w-0 max-w-[18.5rem]'
+
+function chunkEvery(items, size) {
+  const chunks = []
+  for (let i = 0; i < items.length; i += size) {
+    chunks.push(items.slice(i, i + size))
+  }
+  return chunks
+}
+
+const mobileCatalogRows = chunkEvery(beatsCatalog, CARDS_PER_MOBILE_ROW)
+
 export default function BeatsCatalogPage() {
   const [licenseTrack, setLicenseTrack] = useState(null)
 
@@ -26,18 +41,50 @@ export default function BeatsCatalogPage() {
             title="Beats catalog"
             subtitle="Browse every track—same leases, same quality."
           />
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+          {/* Mobile: each row = up to 4 cards in a horizontal scroller */}
+          <div className="flex flex-col gap-8 sm:hidden">
+            {mobileCatalogRows.map((row, rowIndex) => (
+              <div
+                key={rowIndex}
+                className="-mx-8 flex flex-nowrap gap-4 overflow-x-auto px-8 pb-2 pt-3 [-ms-overflow-style:none] [scrollbar-width:none] snap-x snap-mandatory [&::-webkit-scrollbar]:hidden"
+                style={{ WebkitOverflowScrolling: 'touch' }}
+              >
+                {row.map((beat) => (
+                  <div
+                    key={beat.id}
+                    className="w-[min(85vw,18.5rem)] shrink-0 snap-start"
+                  >
+                    <div className={beatCardShellClass}>
+                      <BeatCard
+                        compact
+                        title={beat.title}
+                        meta={beat.meta}
+                        price={beat.price}
+                        image={beat.image}
+                        alt={beat.alt}
+                        onSelectLicense={() => setLicenseTrack(beat)}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+
+          {/* sm+: grid — card width capped & centered like mobile / home */}
+          <div className="hidden sm:grid sm:grid-cols-2 sm:justify-items-center sm:gap-6 lg:grid-cols-4 lg:gap-8">
             {beatsCatalog.map((beat) => (
-              <BeatCard
-                key={beat.id}
-                compact
-                title={beat.title}
-                meta={beat.meta}
-                price={beat.price}
-                image={beat.image}
-                alt={beat.alt}
-                onSelectLicense={() => setLicenseTrack(beat)}
-              />
+              <div key={beat.id} className={beatCardShellClass}>
+                <BeatCard
+                  compact
+                  title={beat.title}
+                  meta={beat.meta}
+                  price={beat.price}
+                  image={beat.image}
+                  alt={beat.alt}
+                  onSelectLicense={() => setLicenseTrack(beat)}
+                />
+              </div>
             ))}
           </div>
         </div>
