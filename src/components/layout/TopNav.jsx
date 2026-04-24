@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { licensesOverlayContent } from '../../data/homeContent.js'
 import { scrollElementBelowNav } from '../../utils/scrollToAnchor.js'
@@ -15,7 +15,7 @@ function hashIdFromHomeHashLink(to) {
 }
 
 const navLinkClassName =
-  'text-sm font-medium leading-normal text-white transition-colors duration-300 hover:text-primary'
+  'text-medium font-bold leading-normal text-white transition-colors duration-300 hover:text-primary'
 
 export function TopNav({ links }) {
   const { openCart, cartCount } = useCart()
@@ -40,43 +40,49 @@ export function TopNav({ links }) {
                 <LogoWordmark className="hidden sm:block" />
               </Link>
               <nav
-                className="flex min-w-0 items-center justify-center gap-4 overflow-x-auto sm:gap-9 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                className="flex min-w-0 items-center justify-center gap-4 overflow-x-auto sm:gap-9 lg:gap-14 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
                 aria-label="Main"
               >
-                {links.map(({ to, label, licensesOverlay }) =>
-                  licensesOverlay ? (
-                    <button
-                      key={label}
-                      type="button"
-                      className={`${navLinkClassName} shrink-0`}
-                      onClick={() => setLicensesOpen(true)}
-                    >
-                      {label}
-                    </button>
-                  ) : (
-                    <Link
-                      key={label}
-                      to={to}
-                      className={`${navLinkClassName} shrink-0`}
-                      onClick={(e) => {
-                        const id = hashIdFromHomeHashLink(to)
-                        if (!id) return
-                        if (
-                          location.pathname === '/' &&
-                          location.hash === `#${id}`
-                        ) {
-                          e.preventDefault()
-                          const target = document.getElementById(id)
-                          if (target) {
-                            scrollElementBelowNav(target, { behavior: 'smooth' })
+                {links.map(({ to, label, licensesOverlay }, index) => (
+                  <Fragment key={label}>
+                    {index > 0 ? (
+                      <span
+                        aria-hidden
+                        className="inline-block h-3.5 w-px shrink-0 self-center bg-nav-border"
+                      />
+                    ) : null}
+                    {licensesOverlay ? (
+                      <button
+                        type="button"
+                        className={`${navLinkClassName} shrink-0`}
+                        onClick={() => setLicensesOpen(true)}
+                      >
+                        {label}
+                      </button>
+                    ) : (
+                      <Link
+                        to={to}
+                        className={`${navLinkClassName} shrink-0`}
+                        onClick={(e) => {
+                          const id = hashIdFromHomeHashLink(to)
+                          if (!id) return
+                          if (
+                            location.pathname === '/' &&
+                            location.hash === `#${id}`
+                          ) {
+                            e.preventDefault()
+                            const target = document.getElementById(id)
+                            if (target) {
+                              scrollElementBelowNav(target, { behavior: 'smooth' })
+                            }
                           }
-                        }
-                      }}
-                    >
-                      {label}
-                    </Link>
-                  ),
-                )}
+                        }}
+                      >
+                        {label}
+                      </Link>
+                    )}
+                  </Fragment>
+                ))}
               </nav>
               <div className="flex justify-self-end">
                 <button
