@@ -1,3 +1,25 @@
+const cartIconStyle = { fontVariationSettings: "'FILL' 1" }
+
+function LicenseAddToCartButton({ plan, onAddToCart }) {
+  if (typeof onAddToCart !== 'function') return null
+  return (
+    <button
+      type="button"
+      onClick={() => onAddToCart(plan)}
+      className="flex h-auto min-h-[3.5rem] w-[15%] min-w-[2.75rem] shrink-0 items-center justify-center self-stretch border-l border-primary/20 bg-primary text-background-dark shadow-glow transition hover:bg-primary-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:min-w-14"
+      aria-label="Add to cart"
+      title="Add to cart"
+    >
+      <span
+        className="material-symbols-outlined text-[22px] sm:text-2xl"
+        style={cartIconStyle}
+      >
+        add_shopping_cart
+      </span>
+    </button>
+  )
+}
+
 /** Spotlight-style license card (same layout as the former SpotlightSection). */
 export function SpotlightLicenseCard({
   title,
@@ -9,6 +31,7 @@ export function SpotlightLicenseCard({
   eyebrow = 'License',
   selectedPlanName = null,
   onSelectPlan,
+  onAddToCart,
 }) {
   const selectable = typeof onSelectPlan === 'function'
   const [singlePlan] = plans
@@ -55,18 +78,24 @@ export function SpotlightLicenseCard({
         </h2>
         <p className="mb-6 text-base text-text-muted sm:text-lg">{description}</p>
         {plans.length === 1 && !selectable && singlePlan ? (
-          <div className="relative w-full overflow-hidden rounded-md border-2 border-primary/30 bg-primary/5 p-4 sm:p-5">
-            <span className="mb-1 block text-sm font-bold uppercase tracking-wider text-primary">
-              {singlePlan.name}
-            </span>
-            <div className="flex w-full flex-col gap-1 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
-              <span className="text-2xl font-bold text-white sm:text-3xl">
-                {singlePlan.price}
+          <div className="flex w-full min-h-[3.5rem] overflow-hidden rounded-md border-2 border-primary/30">
+            <div className="flex min-w-0 w-[85%] flex-col justify-center border-r border-white/5 bg-primary/5 p-4 sm:p-5">
+              <span className="mb-1 block text-sm font-bold uppercase tracking-wider text-primary">
+                {singlePlan.name}
               </span>
-              <p className="text-sm text-text-muted sm:max-w-[60%] sm:text-right sm:text-base">
-                {singlePlan.detail}
-              </p>
+              <div className="flex w-full flex-col gap-1 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
+                <span className="text-2xl font-bold text-white sm:text-3xl">
+                  {singlePlan.price}
+                </span>
+                <p className="text-sm text-text-muted sm:max-w-[60%] sm:text-right sm:text-base">
+                  {singlePlan.detail}
+                </p>
+              </div>
             </div>
+            <LicenseAddToCartButton
+              plan={singlePlan}
+              onAddToCart={onAddToCart}
+            />
           </div>
         ) : (
         <div
@@ -78,67 +107,101 @@ export function SpotlightLicenseCard({
             const isSelected = selectable && selectedPlanName === plan.name
             const popular = plan.variant === 'popular'
             const popularBase =
-              'group relative flex flex-1 flex-col overflow-hidden rounded-md border-2 p-4 text-left transition-all duration-300'
+              'group relative min-w-0 w-[85%] flex-[0_0_85%] flex max-w-[85%] flex-col justify-center p-4 text-left transition-all duration-300 sm:min-h-[4.5rem]'
             const popularIdle =
               'border-primary/30 bg-primary/5 hover:border-primary hover:bg-primary/10'
             const popularSelected =
               'border-primary bg-primary/15 shadow-[0_0_0_1px_rgba(27,187,131,0.5)] ring-2 ring-primary/40'
             const basicBase =
-              'group flex flex-1 flex-col rounded-md border p-4 text-left transition-all duration-300'
+              'group min-w-0 w-[85%] max-w-[85%] flex-[0_0_85%] flex flex-col justify-center p-4 text-left transition-all duration-300 sm:min-h-[4.5rem]'
             const basicIdle =
               'border-white/10 bg-white/5 hover:border-primary/50 hover:bg-white/10'
             const basicSelected =
               'border-primary bg-primary/10 ring-2 ring-primary/30'
+            const rowWrap =
+              'flex w-full min-h-[3.5rem] max-w-full flex-1 flex-row overflow-hidden rounded-md border-2 sm:min-h-[4.5rem]'
+            const popularRowBorder = 'border-primary/30'
+            const basicRowBorder = 'border-white/10'
 
             if (popular) {
               return (
-                <button
+                <div
                   key={plan.name}
-                  type="button"
-                  onClick={() => selectable && onSelectPlan(plan)}
-                  role={selectable ? 'radio' : undefined}
-                  aria-checked={selectable ? isSelected : undefined}
-                  className={`${popularBase} ${
-                    isSelected ? popularSelected : popularIdle
-                  } ${selectable ? 'cursor-pointer' : ''}`}
+                  className={`${rowWrap} ${
+                    isSelected
+                      ? `${popularRowBorder} ring-2 ring-primary/40`
+                      : popularRowBorder
+                  }`}
                 >
-                  <div className="absolute right-0 top-0 rounded-bl-sm bg-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-background-dark">
-                    {plan.badge}
-                  </div>
-                  <span className="mb-1 text-sm font-bold uppercase tracking-wider text-primary">
-                    {plan.name}
-                  </span>
-                  <div className="flex w-full items-end justify-between">
-                    <span className="text-2xl font-bold text-white">{plan.price}</span>
-                    <span className="text-xs text-text-muted">{plan.detail}</span>
-                  </div>
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => selectable && onSelectPlan(plan)}
+                    role={selectable ? 'radio' : undefined}
+                    aria-checked={selectable ? isSelected : undefined}
+                    className={`${popularBase} ${
+                      isSelected ? popularSelected : popularIdle
+                    } sm:border-0 ${
+                      selectable ? 'cursor-pointer' : ''
+                    }`}
+                  >
+                    <div className="absolute right-0 top-0 z-[1] rounded-bl-sm bg-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-background-dark">
+                      {plan.badge}
+                    </div>
+                    <span className="mb-1 text-sm font-bold uppercase tracking-wider text-primary">
+                      {plan.name}
+                    </span>
+                    <div className="flex w-full min-w-0 items-end justify-between gap-2">
+                      <span className="shrink-0 text-2xl font-bold text-white">
+                        {plan.price}
+                      </span>
+                      <span className="min-w-0 text-right text-xs text-text-muted sm:max-w-[50%]">
+                        {plan.detail}
+                      </span>
+                    </div>
+                  </button>
+                  <LicenseAddToCartButton plan={plan} onAddToCart={onAddToCart} />
+                </div>
               )
             }
 
             return (
-              <button
+              <div
                 key={plan.name}
-                type="button"
-                onClick={() => selectable && onSelectPlan(plan)}
-                role={selectable ? 'radio' : undefined}
-                aria-checked={selectable ? isSelected : undefined}
-                className={`${basicBase} ${
-                  isSelected ? basicSelected : basicIdle
-                } ${selectable ? 'cursor-pointer' : ''}`}
+                className={`${rowWrap} ${
+                  isSelected
+                    ? 'border-primary ring-2 ring-primary/30'
+                    : basicRowBorder
+                } bg-white/5`}
               >
-                <span
-                  className={`mb-1 text-sm font-bold uppercase tracking-wider transition-colors ${
-                    isSelected ? 'text-primary' : 'text-text-muted group-hover:text-white'
+                <button
+                  type="button"
+                  onClick={() => selectable && onSelectPlan(plan)}
+                  role={selectable ? 'radio' : undefined}
+                  aria-checked={selectable ? isSelected : undefined}
+                  className={`${basicBase} ${
+                    isSelected ? basicSelected : basicIdle
+                  } !rounded-none !border-0 ${
+                    selectable ? 'cursor-pointer' : ''
                   }`}
                 >
-                  {plan.name}
-                </span>
-                <div className="flex w-full items-end justify-between">
-                  <span className="text-2xl font-bold text-white">{plan.price}</span>
-                  <span className="text-xs text-text-muted">{plan.detail}</span>
-                </div>
-              </button>
+                  <span
+                    className={`mb-1 text-sm font-bold uppercase tracking-wider transition-colors ${
+                      isSelected ? 'text-primary' : 'text-text-muted group-hover:text-white'
+                    }`}
+                  >
+                    {plan.name}
+                  </span>
+                  <div className="flex w-full min-w-0 items-end justify-between gap-2">
+                    <span className="shrink-0 text-2xl font-bold text-white">
+                      {plan.price}
+                    </span>
+                    <span className="min-w-0 text-right text-xs text-text-muted sm:max-w-[50%]">
+                      {plan.detail}
+                    </span>
+                  </div>
+                </button>
+                <LicenseAddToCartButton plan={plan} onAddToCart={onAddToCart} />
+              </div>
             )
           })}
         </div>

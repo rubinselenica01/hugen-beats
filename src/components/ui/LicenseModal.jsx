@@ -38,11 +38,6 @@ export function LicenseModal({ open, onClose, track }) {
     licenseEyebrow,
   } = track
 
-  const selectedPlan =
-    plans.length === 1
-      ? plans[0]
-      : plans.find((p) => p.name === selectedPlanName)
-
   const modal = (
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm"
@@ -68,32 +63,6 @@ export function LicenseModal({ open, onClose, track }) {
         >
           <span className="material-symbols-outlined text-xl">close</span>
         </button>
-        <button
-          type="button"
-          disabled={!selectedPlan}
-          onClick={(e) => {
-            e.stopPropagation()
-            if (!selectedPlan) return
-            addToCart({ track, plan: selectedPlan })
-            onClose()
-          }}
-          className={`absolute bottom-4 right-4 z-[110] flex h-11 w-11 items-center justify-center rounded-full text-background-dark shadow-glow transition-all ${
-            selectedPlan
-              ? 'bg-primary hover:scale-105 hover:bg-primary-hover'
-              : 'cursor-not-allowed bg-primary/35 opacity-50'
-          }`}
-          aria-label="Add to cart"
-          title={
-            selectedPlan ? 'Add to cart' : 'Select a license type first'
-          }
-        >
-          <span
-            className="material-symbols-outlined text-[22px]"
-            style={{ fontVariationSettings: "'FILL' 1" }}
-          >
-            add_shopping_cart
-          </span>
-        </button>
         <SpotlightLicenseCard
           title={title}
           description={description}
@@ -108,6 +77,10 @@ export function LicenseModal({ open, onClose, track }) {
               ? (plan) => setSelectedPlanName(plan.name)
               : undefined
           }
+          onAddToCart={(plan) => {
+            addToCart({ track, plan })
+            onClose()
+          }}
         />
       </div>
     </div>
