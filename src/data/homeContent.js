@@ -33,7 +33,7 @@ export const navLinksCatalog = [
 export const licensesOverlayContent = {
   title: 'Licenses',
   paragraphs: [
-    'Every beat is offered under a non-exclusive lease. Pick a tier that matches your release—streaming MP3, full WAV, or stems for deeper mixes.',
+    'Every beat is offered under a non-exclusive lease: you get the files you need with a lifetime license in one clear package.',
     'Need exclusive rights, film clearance, or custom terms? Use the contact details in the footer and we will align the paperwork with your project.',
   ],
 }
@@ -52,7 +52,7 @@ export const featuredBeats = [
     id: '1',
     title: 'Midnight Pulse',
     meta: '140 BPM · Trap',
-    price: '$29',
+    price: '$79',
     image: img('1511379938547-c1f69419868d', 600, 600),
     alt: 'Midnight Pulse artwork',
     description:
@@ -60,13 +60,10 @@ export const featuredBeats = [
     tags: ['#Trap', '#Dark', '#Streaming'],
     licenseEyebrow: 'License',
     plans: [
-      { name: 'Basic Lease', price: '$29', detail: 'MP3' },
       {
-        variant: 'popular',
-        name: 'Premium Lease',
+        name: 'Full License',
         price: '$79',
-        detail: 'WAV + Stems',
-        badge: 'Popular',
+        detail: 'MP4 + WAV + lifetime license',
       },
     ],
   },
@@ -74,7 +71,7 @@ export const featuredBeats = [
     id: '2',
     title: 'Neon Drift',
     meta: '92 BPM · R&B',
-    price: '$35',
+    price: '$89',
     image: img('1514320291840-2e0a9bf2a9ae', 600, 600),
     alt: 'Neon Drift artwork',
     description:
@@ -82,13 +79,10 @@ export const featuredBeats = [
     tags: ['#R&B', '#Soul', '#Hooks'],
     licenseEyebrow: 'License',
     plans: [
-      { name: 'Basic Lease', price: '$35', detail: 'MP3' },
       {
-        variant: 'popular',
-        name: 'Premium Lease',
+        name: 'Full License',
         price: '$89',
-        detail: 'WAV + Stems',
-        badge: 'Popular',
+        detail: 'MP4 + WAV + lifetime license',
       },
     ],
   },
@@ -96,7 +90,7 @@ export const featuredBeats = [
     id: '3',
     title: 'Glass City',
     meta: '128 BPM · Electronic',
-    price: '$32',
+    price: '$85',
     image: img('1470225620780-dba8ba36b745', 600, 600),
     alt: 'Glass City artwork',
     description:
@@ -104,13 +98,10 @@ export const featuredBeats = [
     tags: ['#Electronic', '#Club', '#Wide'],
     licenseEyebrow: 'License',
     plans: [
-      { name: 'Basic Lease', price: '$32', detail: 'MP3' },
       {
-        variant: 'popular',
-        name: 'Premium Lease',
+        name: 'Full License',
         price: '$85',
-        detail: 'WAV + Stems',
-        badge: 'Popular',
+        detail: 'MP4 + WAV + lifetime license',
       },
     ],
   },
@@ -118,7 +109,7 @@ export const featuredBeats = [
     id: '4',
     title: 'Velvet Runway',
     meta: '85 BPM · Soul',
-    price: '$40',
+    price: '$95',
     image: img('1459749411175-04bf5292ceea', 600, 600),
     alt: 'Velvet Runway artwork',
     description:
@@ -126,13 +117,10 @@ export const featuredBeats = [
     tags: ['#Soul', '#Warm', '#Live'],
     licenseEyebrow: 'License',
     plans: [
-      { name: 'Basic Lease', price: '$40', detail: 'MP3' },
       {
-        variant: 'popular',
-        name: 'Premium Lease',
+        name: 'Full License',
         price: '$95',
-        detail: 'WAV + Stems',
-        badge: 'Popular',
+        detail: 'MP4 + WAV + lifetime license',
       },
     ],
   },
@@ -143,7 +131,7 @@ const catalogBeatsExtra = [
     id: '5',
     title: 'Chrome Static',
     meta: '150 BPM · Hip-Hop',
-    price: '$28',
+    price: '$78',
     image: img('1514525253161-7a46d19cd819', 600, 600),
     alt: 'Chrome Static artwork',
     description:
@@ -151,13 +139,10 @@ const catalogBeatsExtra = [
     tags: ['#HipHop', '#Wide', '#Hooks'],
     licenseEyebrow: 'License',
     plans: [
-      { name: 'Basic Lease', price: '$28', detail: 'MP3' },
       {
-        variant: 'popular',
-        name: 'Premium Lease',
+        name: 'Full License',
         price: '$78',
-        detail: 'WAV + Stems',
-        badge: 'Popular',
+        detail: 'MP4 + WAV + lifetime license',
       },
     ],
   },
@@ -165,7 +150,7 @@ const catalogBeatsExtra = [
     id: '6',
     title: 'Low Tide',
     meta: '95 BPM · Lo-Fi',
-    price: '$26',
+    price: '$72',
     image: img('1511671782779-c97d3d27a1d4', 600, 600),
     alt: 'Low Tide artwork',
     description:
@@ -173,13 +158,10 @@ const catalogBeatsExtra = [
     tags: ['#LoFi', '#Chill', '#Tape'],
     licenseEyebrow: 'License',
     plans: [
-      { name: 'Basic Lease', price: '$26', detail: 'MP3' },
       {
-        variant: 'popular',
-        name: 'Premium Lease',
+        name: 'Full License',
         price: '$72',
-        detail: 'WAV + Stems',
-        badge: 'Popular',
+        detail: 'MP4 + WAV + lifetime license',
       },
     ],
   },
@@ -187,7 +169,7 @@ const catalogBeatsExtra = [
     id: '7',
     title: 'Signal Bloom',
     meta: '138 BPM · Future Bass',
-    price: '$34',
+    price: '$88',
     image: img('1498038422601-82a377107fcd', 600, 600),
     alt: 'Signal Bloom artwork',
     description:
@@ -195,13 +177,10 @@ const catalogBeatsExtra = [
     tags: ['#FutureBass', '#Bright', '#Drop'],
     licenseEyebrow: 'License',
     plans: [
-      { name: 'Basic Lease', price: '$34', detail: 'MP3' },
       {
-        variant: 'popular',
-        name: 'Premium Lease',
+        name: 'Full License',
         price: '$88',
-        detail: 'WAV + Stems',
-        badge: 'Popular',
+        detail: 'MP4 + WAV + lifetime license',
       },
     ],
   },
@@ -209,7 +188,7 @@ const catalogBeatsExtra = [
     id: '8',
     title: 'Basement Echo',
     meta: '88 BPM · Boom Bap',
-    price: '$30',
+    price: '$80',
     image: img('1470229530311-64f71b6e6f04', 600, 600),
     alt: 'Basement Echo artwork',
     description:
@@ -217,13 +196,10 @@ const catalogBeatsExtra = [
     tags: ['#BoomBap', '#Grimy', '#Classic'],
     licenseEyebrow: 'License',
     plans: [
-      { name: 'Basic Lease', price: '$30', detail: 'MP3' },
       {
-        variant: 'popular',
-        name: 'Premium Lease',
+        name: 'Full License',
         price: '$80',
-        detail: 'WAV + Stems',
-        badge: 'Popular',
+        detail: 'MP4 + WAV + lifetime license',
       },
     ],
   },
@@ -231,7 +207,7 @@ const catalogBeatsExtra = [
     id: '9',
     title: 'Aurora Keys',
     meta: '120 BPM · Pop',
-    price: '$36',
+    price: '$92',
     image: img('1516450760-636588e2f58b', 600, 600),
     alt: 'Aurora Keys artwork',
     description:
@@ -239,13 +215,10 @@ const catalogBeatsExtra = [
     tags: ['#Pop', '#Bright', '#Hooks'],
     licenseEyebrow: 'License',
     plans: [
-      { name: 'Basic Lease', price: '$36', detail: 'MP3' },
       {
-        variant: 'popular',
-        name: 'Premium Lease',
+        name: 'Full License',
         price: '$92',
-        detail: 'WAV + Stems',
-        badge: 'Popular',
+        detail: 'MP4 + WAV + lifetime license',
       },
     ],
   },
@@ -253,7 +226,7 @@ const catalogBeatsExtra = [
     id: '10',
     title: 'Night Freight',
     meta: '145 BPM · Drill',
-    price: '$33',
+    price: '$86',
     image: img('1516280440614-37939bbacd81', 600, 600),
     alt: 'Night Freight artwork',
     description:
@@ -261,13 +234,10 @@ const catalogBeatsExtra = [
     tags: ['#Drill', '#Dark', '#808'],
     licenseEyebrow: 'License',
     plans: [
-      { name: 'Basic Lease', price: '$33', detail: 'MP3' },
       {
-        variant: 'popular',
-        name: 'Premium Lease',
+        name: 'Full License',
         price: '$86',
-        detail: 'WAV + Stems',
-        badge: 'Popular',
+        detail: 'MP4 + WAV + lifetime license',
       },
     ],
   },
@@ -275,7 +245,7 @@ const catalogBeatsExtra = [
     id: '11',
     title: 'Soft Circuit',
     meta: '102 BPM · Alt R&B',
-    price: '$38',
+    price: '$94',
     image: img('1511379938547-c1f69419868d', 600, 600),
     alt: 'Soft Circuit artwork',
     description:
@@ -283,13 +253,10 @@ const catalogBeatsExtra = [
     tags: ['#AltR&B', '#Texture', '#Melodic'],
     licenseEyebrow: 'License',
     plans: [
-      { name: 'Basic Lease', price: '$38', detail: 'MP3' },
       {
-        variant: 'popular',
-        name: 'Premium Lease',
+        name: 'Full License',
         price: '$94',
-        detail: 'WAV + Stems',
-        badge: 'Popular',
+        detail: 'MP4 + WAV + lifetime license',
       },
     ],
   },
@@ -297,7 +264,7 @@ const catalogBeatsExtra = [
     id: '12',
     title: 'Pulse Atlas',
     meta: '174 BPM · Drum & Bass',
-    price: '$31',
+    price: '$84',
     image: img('1514320291840-2e0a9bf2a9ae', 600, 600),
     alt: 'Pulse Atlas artwork',
     description:
@@ -305,13 +272,10 @@ const catalogBeatsExtra = [
     tags: ['#DnB', '#Energy', '#Roll'],
     licenseEyebrow: 'License',
     plans: [
-      { name: 'Basic Lease', price: '$31', detail: 'MP3' },
       {
-        variant: 'popular',
-        name: 'Premium Lease',
+        name: 'Full License',
         price: '$84',
-        detail: 'WAV + Stems',
-        badge: 'Popular',
+        detail: 'MP4 + WAV + lifetime license',
       },
     ],
   },

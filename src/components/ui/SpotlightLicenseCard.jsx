@@ -11,6 +11,7 @@ export function SpotlightLicenseCard({
   onSelectPlan,
 }) {
   const selectable = typeof onSelectPlan === 'function'
+  const [singlePlan] = plans
 
   return (
     <div className="relative flex w-full flex-col overflow-hidden rounded-lg border border-white/5 bg-surface shadow-2xl lg:flex-row">
@@ -53,6 +54,21 @@ export function SpotlightLicenseCard({
           {title}
         </h2>
         <p className="mb-6 text-base text-text-muted sm:text-lg">{description}</p>
+        {plans.length === 1 && !selectable && singlePlan ? (
+          <div className="relative w-full overflow-hidden rounded-md border-2 border-primary/30 bg-primary/5 p-4 sm:p-5">
+            <span className="mb-1 block text-sm font-bold uppercase tracking-wider text-primary">
+              {singlePlan.name}
+            </span>
+            <div className="flex w-full flex-col gap-1 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
+              <span className="text-2xl font-bold text-white sm:text-3xl">
+                {singlePlan.price}
+              </span>
+              <p className="text-sm text-text-muted sm:max-w-[60%] sm:text-right sm:text-base">
+                {singlePlan.detail}
+              </p>
+            </div>
+          </div>
+        ) : (
         <div
           className="flex flex-col gap-4 sm:flex-row"
           role={selectable ? 'radiogroup' : undefined}
@@ -126,6 +142,7 @@ export function SpotlightLicenseCard({
             )
           })}
         </div>
+        )}
       </div>
     </div>
   )
