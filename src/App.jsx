@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
+import { routes } from './constants/routes.js'
 import { CartProvider } from './context/CartContext.jsx'
 import BeatsCatalogPage from './pages/BeatsCatalogPage.jsx'
 import HomePage from './pages/HomePage.jsx'
@@ -22,12 +23,11 @@ export default function App() {
       <ScrollToTop />
       <CartProvider>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/beats" element={<BeatsCatalogPage />} />
-          <Route path="/auth/login" element={<LoginPage />} />
-          <Route path="/admin/login" element={<LoginPage />} />
+          <Route path={routes.home} element={<HomePage />} />
+          <Route path={routes.beatsCatalog} element={<BeatsCatalogPage />} />
+          <Route path={routes.adminLogin} element={<LoginPage />} />
           <Route
-            path="/admin/beat-management"
+            path={routes.adminBeatManagement}
             element={
               <RequireAdminSession>
                 <AdminBeatManagementPage />

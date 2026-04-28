@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { apiUrl } from '../../utils/apiBase.js'
+import { adminLoginHrefWithRedirect } from '../../constants/routes.js'
+import { ADMIN_ME_GUARD_TIMEOUT_MS } from '../../constants/timing.js'
+import { adminFetch } from '../../utils/adminFetch.js'
+import { isMeResponseBody, responseLooksLikeJson } from '../../utils/fastApiParse.js'
 
 /**
  * Guards admin-only routes; redirects unauthenticated visitors to `/admin/login`
@@ -14,25 +17,52 @@ export function RequireAdminSession({ children }) {
   useEffect(() => {
     let cancelled = false
 
+    async function redirectToLogin() {
+      if (cancelled) return
+      navigate(
+        adminLoginHrefWithRedirect(location.pathname, location.search),
+        { replace: true },
+      )
+    }
+
     ;(async () => {
+      const controller = new AbortController()
+      const tid = window.setTimeout(() => controller.abort(), ADMIN_ME_GUARD_TIMEOUT_MS)
       try {
-        const res = await fetch(apiUrl('/admin/me'), {
-          credentials: 'include',
-          headers: { Accept: 'application/json' },
+        const res = await adminFetch('/admin/me', {
+          signal: controller.signal,
         })
         if (cancelled) return
-        if (res.ok) {
-          setReady(true)
+
+        // Static hosts often rewrite unknown paths to index.html → 200 + HTML — do not trust res.ok alone.
+        if (
+          !res.ok ||
+          !responseLooksLikeJson(res)
+        ) {
+          await redirectToLogin()
           return
         }
+
+        let data = null
+        try {
+          data = await res.json()
+        } catch {
+          await redirectToLogin()
+          return
+        }
+
+        if (!isMeResponseBody(data)) {
+          await redirectToLogin()
+          return
+        }
+
+        setReady(true)
       } catch {
-        /* handled below */
+        if (cancelled) return
+        await redirectToLogin()
+      } finally {
+        window.clearTimeout(tid)
       }
-      if (cancelled) return
-      const redirect = encodeURIComponent(
-        `${location.pathname}${location.search}`,
-      )
-      navigate(`/admin/login?redirect=${redirect}`, { replace: true })
     })()
 
     return () => {

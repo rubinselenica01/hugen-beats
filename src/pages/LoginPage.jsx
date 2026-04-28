@@ -1,68 +1,45 @@
 import { useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { MaterialIcon } from '../components/ui/MaterialIcon.jsx'
-import { apiUrl } from '../utils/apiBase.js'
-
-const LOGIN_FETCH_TIMEOUT_MS = 25_000
-
-function parseDetail(detail) {
-  if (typeof detail === 'string') return detail
-  if (Array.isArray(detail) && detail[0]?.msg) return detail.map((x) => x.msg).join(' ')
-  return null
-}
-
-/** Fetch was cancelled because it took longer than LOGIN_FETCH_TIMEOUT_MS. */
-function isAbortError(error) {
-  return Boolean(error?.name === 'AbortError')
-}
-
-/** Fetch failed before HTTP response (offline, refused connection, DNS, CORS aborted, …). */
-function isNetworkFailure(error) {
-  if (!error || typeof error !== 'object') return false
-  if (error instanceof TypeError) return true
-  if (error.name === 'NetworkError') return true
-  return String(error.message ?? '').toLowerCase().includes('failed to fetch')
-}
-
-function isUnreachableHttpStatus(status) {
-  return status >= 500 && status < 600
-}
+import { routes } from '../constants/routes.js'
+import { LOGIN_SUBMIT_TIMEOUT_MS } from '../constants/timing.js'
+import { adminFetch } from '../utils/adminFetch.js'
+import { parseFastApiErrorDetail } from '../utils/fastApiParse.js'
+import { isAbortError, isNetworkFailure, isServerErrorHttpStatus } from '../utils/netErrors.js'
 
 export default function LoginPage() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const redirectTo = useMemo(() => {
     const raw = searchParams.get('redirect')
-    if (!raw || !raw.startsWith('/')) return '/admin/beat-management'
+    if (!raw || !raw.startsWith('/')) return routes.adminBeatManagement
     return raw
   }, [searchParams])
 
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState(null)
   const [submitting, setSubmitting] = useState(false)
 
   async function onSubmit(e) {
     e.preventDefault()
+    const form = e.currentTarget
+    const fd = new FormData(form)
+    const emailTrim = String(fd.get('username') ?? '').trim()
+    const passwordVal = String(fd.get('password') ?? '')
     setError(null)
     setSubmitting(true)
     try {
       let res
       const controller = new AbortController()
-      const timeoutId = window.setTimeout(() => controller.abort(), LOGIN_FETCH_TIMEOUT_MS)
+      const timeoutId = window.setTimeout(() => controller.abort(), LOGIN_SUBMIT_TIMEOUT_MS)
       try {
-        res = await fetch(apiUrl('/admin/login'), {
+        res = await adminFetch('/admin/login', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-          credentials: 'include',
           signal: controller.signal,
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            email: email.trim(),
-            password,
+            email: emailTrim,
+            password: passwordVal,
           }),
         })
       } catch (err) {
@@ -90,7 +67,7 @@ export default function LoginPage() {
         return
       }
 
-      if (isUnreachableHttpStatus(res.status)) {
+      if (isServerErrorHttpStatus(res.status)) {
         setError({
           kind: 'unavailable',
           message: 'Something went wrong. Try again later.',
@@ -101,7 +78,7 @@ export default function LoginPage() {
       let message = `Could not sign in (${res.status})`
       try {
         const data = await res.json()
-        const parsed = parseDetail(data?.detail)
+        const parsed = parseFastApiErrorDetail(data?.detail)
         if (parsed) message = parsed
       } catch {
         /* ignore */
@@ -157,19 +134,25 @@ export default function LoginPage() {
               Sign in with the admin email configured for the Beat Producer API.
             </p>
 
-            <form className="mt-8 flex flex-col gap-5" onSubmit={onSubmit} noValidate>
+            <form
+              className="mt-8 flex flex-col gap-5"
+              onSubmit={onSubmit}
+              noValidate
+              method="post"
+              autoComplete="on"
+            >
               <div className="flex flex-col gap-2">
                 <label htmlFor="auth-email" className="text-sm font-medium text-text-muted">
                   Email
                 </label>
                 <input
                   id="auth-email"
-                  name="email"
+                  name="username"
                   type="email"
-                  autoComplete="email"
+                  autoComplete="username"
+                  inputMode="email"
+                  spellCheck={false}
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
                   className="rounded-md border border-nav-border bg-background-dark px-4 py-3 text-sm text-text-main outline-none ring-primary/0 transition-[box-shadow,border-color] placeholder:text-text-muted/60 focus:border-primary/60 focus:ring-2 focus:ring-primary/25"
                   placeholder="you@example.com"
                 />
@@ -184,9 +167,8 @@ export default function LoginPage() {
                     name="password"
                     type={showPassword ? 'text' : 'password'}
                     autoComplete="current-password"
+                    spellCheck={false}
                     required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
                     className="w-full rounded-md border border-nav-border bg-background-dark py-3 pl-4 pr-12 text-sm text-text-main outline-none transition-[box-shadow,border-color] placeholder:text-text-muted/60 focus:border-primary/60 focus:ring-2 focus:ring-primary/25"
                   />
                   <button

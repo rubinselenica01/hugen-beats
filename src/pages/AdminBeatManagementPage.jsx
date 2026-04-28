@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { MaterialIcon } from '../components/ui/MaterialIcon.jsx'
-import { apiUrl } from '../utils/apiBase.js'
+import { routes } from '../constants/routes.js'
+import { adminFetch } from '../utils/adminFetch.js'
 
 export default function AdminBeatManagementPage() {
   const navigate = useNavigate()
@@ -18,13 +19,10 @@ export default function AdminBeatManagementPage() {
       setBeatsLoading(true)
       setBeatsError(null)
       try {
-        const res = await fetch(apiUrl('/admin/beats'), {
-          credentials: 'include',
-          headers: { Accept: 'application/json' },
-        })
+        const res = await adminFetch('/admin/beats')
         if (cancelled) return
         if (res.status === 401) {
-          navigate('/admin/login', { replace: true })
+          navigate(routes.adminLogin, { replace: true })
           return
         }
         if (!res.ok) {
@@ -50,14 +48,12 @@ export default function AdminBeatManagementPage() {
     setLogoutError(null)
     setLoggingOut(true)
     try {
-      const res = await fetch(apiUrl('/admin/logout'), {
+      const res = await adminFetch('/admin/logout', {
         method: 'POST',
-        credentials: 'include',
-        headers: { Accept: 'application/json' },
       })
 
       if (res.ok) {
-        navigate('/admin/login', { replace: true })
+        navigate(routes.adminLogin, { replace: true })
         return
       }
       setLogoutError('Could not sign out. Try again.')
