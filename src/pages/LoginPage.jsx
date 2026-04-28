@@ -3,10 +3,29 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { MaterialIcon } from '../components/ui/MaterialIcon.jsx'
 import { apiUrl } from '../utils/apiBase.js'
 
+const LOGIN_FETCH_TIMEOUT_MS = 25_000
+
 function parseDetail(detail) {
   if (typeof detail === 'string') return detail
   if (Array.isArray(detail) && detail[0]?.msg) return detail.map((x) => x.msg).join(' ')
   return null
+}
+
+/** Fetch was cancelled because it took longer than LOGIN_FETCH_TIMEOUT_MS. */
+function isAbortError(error) {
+  return Boolean(error?.name === 'AbortError')
+}
+
+/** Fetch failed before HTTP response (offline, refused connection, DNS, CORS aborted, …). */
+function isNetworkFailure(error) {
+  if (!error || typeof error !== 'object') return false
+  if (error instanceof TypeError) return true
+  if (error.name === 'NetworkError') return true
+  return String(error.message ?? '').toLowerCase().includes('failed to fetch')
+}
+
+function isUnreachableHttpStatus(status) {
+  return status >= 500 && status < 600
 }
 
 export default function LoginPage() {
@@ -29,21 +48,53 @@ export default function LoginPage() {
     setError(null)
     setSubmitting(true)
     try {
-      const res = await fetch(apiUrl('/admin/login'), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          email: email.trim(),
-          password,
-        }),
-      })
+      let res
+      const controller = new AbortController()
+      const timeoutId = window.setTimeout(() => controller.abort(), LOGIN_FETCH_TIMEOUT_MS)
+      try {
+        res = await fetch(apiUrl('/admin/login'), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          credentials: 'include',
+          signal: controller.signal,
+          body: JSON.stringify({
+            email: email.trim(),
+            password,
+          }),
+        })
+      } catch (err) {
+        if (isAbortError(err)) {
+          setError({
+            kind: 'unavailable',
+            message: 'This is taking too long. Try again.',
+          })
+          return
+        }
+        if (isNetworkFailure(err)) {
+          setError({
+            kind: 'unavailable',
+            message: 'Connection failed. Try again.',
+          })
+          return
+        }
+        throw err
+      } finally {
+        window.clearTimeout(timeoutId)
+      }
 
       if (res.ok) {
         navigate(redirectTo, { replace: true })
+        return
+      }
+
+      if (isUnreachableHttpStatus(res.status)) {
+        setError({
+          kind: 'unavailable',
+          message: 'Something went wrong. Try again later.',
+        })
         return
       }
 
@@ -55,9 +106,19 @@ export default function LoginPage() {
       } catch {
         /* ignore */
       }
-      setError(message)
-    } catch {
-      setError('Network error—check that the API is running and reachable.')
+      setError({ kind: 'auth', message })
+    } catch (err) {
+      if (isAbortError(err)) {
+        setError({
+          kind: 'unavailable',
+          message: 'This is taking too long. Try again.',
+        })
+      } else {
+        setError({
+          kind: 'unavailable',
+          message: 'Something went wrong. Try again.',
+        })
+      }
     } finally {
       setSubmitting(false)
     }
@@ -144,12 +205,28 @@ export default function LoginPage() {
               </div>
 
               {error ? (
-                <p
-                  className="rounded-md border border-red-900/80 bg-red-950/40 px-3 py-2 text-sm text-red-200"
-                  role="alert"
-                >
-                  {error}
-                </p>
+                <div role="alert">
+                  {error.kind === 'unavailable' ? (
+                    <div className="rounded-md border border-amber-900/70 bg-amber-950/35 px-3 py-3 text-left">
+                      <div className="flex gap-3">
+                        <MaterialIcon
+                          name="cloud_off"
+                          className="shrink-0 text-[22px] text-amber-300/95"
+                          aria-hidden
+                        />
+                        <div className="min-w-0">
+                          <p className="text-sm leading-relaxed text-amber-200/95">
+                            {error.message}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="rounded-md border border-red-900/80 bg-red-950/40 px-3 py-2 text-sm text-red-200">
+                      {error.message}
+                    </p>
+                  )}
+                </div>
               ) : null}
 
               <button
