@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { AddBeatDialog } from '../components/admin/AddBeatDialog.jsx'
 import { MaterialIcon } from '../components/ui/MaterialIcon.jsx'
 import { routes } from '../constants/routes.js'
 import { adminFetch } from '../utils/adminFetch.js'
@@ -11,6 +12,8 @@ export default function AdminBeatManagementPage() {
   const [beats, setBeats] = useState(null)
   const [beatsError, setBeatsError] = useState(null)
   const [beatsLoading, setBeatsLoading] = useState(true)
+  const [beatsListVersion, setBeatsListVersion] = useState(0)
+  const [addBeatOpen, setAddBeatOpen] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -42,7 +45,7 @@ export default function AdminBeatManagementPage() {
     return () => {
       cancelled = true
     }
-  }, [navigate])
+  }, [navigate, beatsListVersion])
 
   async function handleLogout() {
     setLogoutError(null)
@@ -71,6 +74,11 @@ export default function AdminBeatManagementPage() {
       className="flex min-h-[100dvh] w-full flex-col bg-background-dark"
       aria-label="Admin beat management"
     >
+      <AddBeatDialog
+        open={addBeatOpen}
+        onClose={() => setAddBeatOpen(false)}
+        onSaved={() => setBeatsListVersion((v) => v + 1)}
+      />
       <header className="flex shrink-0 items-start justify-end gap-3 px-6 py-5 md:px-10">
         <div className="flex flex-col items-end gap-1">
           {logoutError ? (
@@ -91,11 +99,21 @@ export default function AdminBeatManagementPage() {
       </header>
 
       <main className="page-container flex flex-1 flex-col gap-6 px-6 pb-12 pt-4 md:px-10 md:pt-8">
-        <div>
-          <h1 className="font-display text-2xl font-bold tracking-tight text-white md:text-3xl">
-            Beat management
-          </h1>
-          <p className="mt-1 text-sm text-text-muted">Uploads and publishing will appear here.</p>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <h1 className="font-display text-2xl font-bold tracking-tight text-white md:text-3xl">
+              Beat management
+            </h1>
+            <p className="mt-1 text-sm text-text-muted">Uploads and publishing will appear here.</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setAddBeatOpen(true)}
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-bold text-background-dark transition-colors hover:bg-primary-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          >
+            <MaterialIcon name="add" className="text-[20px]" />
+            Add Beat
+          </button>
         </div>
 
         {beatsError ? (
