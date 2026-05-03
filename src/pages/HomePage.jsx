@@ -10,17 +10,38 @@ import { LicenseModal } from '../components/ui/LicenseModal.jsx'
 import {
   about,
   customComposition,
-  featuredBeats,
   footer,
   hero,
   navLinks,
 } from '../data/homeContent.js'
+import { apiBeatToDisplayBeat, fetchCatalogBeats } from '../utils/catalogBeatsApi.js'
 import { scrollElementBelowNav } from '../utils/scrollToAnchor.js'
 
 export default function HomePage() {
   const [licenseTrack, setLicenseTrack] = useState(null)
+  const [catalogBeats, setCatalogBeats] = useState(null)
+  const [catalogLoadError, setCatalogLoadError] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    let cancelled = false
+    fetchCatalogBeats()
+      .then((raw) => {
+        if (cancelled) return
+        const list = Array.isArray(raw) ? raw.map(apiBeatToDisplayBeat) : []
+        setCatalogBeats(list)
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setCatalogLoadError(true)
+          setCatalogBeats([])
+        }
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   useEffect(() => {
     const id = location.hash?.replace(/^#/, '')
@@ -67,7 +88,9 @@ export default function HomePage() {
           backgroundImage={hero.backgroundImage}
         />
         <FeaturedBeatsSection
-          beats={featuredBeats}
+          loading={catalogBeats === null && !catalogLoadError}
+          loadError={catalogLoadError}
+          beats={(catalogBeats ?? []).slice(0, 4)}
           onSelectLicense={setLicenseTrack}
         />
         <CustomCompositionSection content={customComposition} />

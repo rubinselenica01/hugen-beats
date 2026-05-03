@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --top-nav-height: 4.5rem;
+    --top-nav-height: 4rem;
   }
 
   html {

@@ -3,6 +3,10 @@ import { producerBrand } from '../producerBrand.js'
 const img = (id, w = 800, h = 600) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&h=${h}&q=80`
 
+/** Demo preview audio for catalog / featured cards (HTTPS, short clip). Override per beat via `previewAudioUrl`. */
+export const defaultBeatPreviewAudioUrl =
+  'https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3'
+
 /** Footer contact & socials — override via `.env` (see `.env.example`). */
 const footerValues = {
   email:

@@ -36,6 +36,15 @@ export default {
       boxShadow: {
         glow: '0 0 30px rgba(27, 187, 131, 0.3)',
       },
+      keyframes: {
+        'eq-bar': {
+          '0%, 100%': { transform: 'scaleY(0.2)' },
+          '50%': { transform: 'scaleY(1)' },
+        },
+      },
+      animation: {
+        'eq-bar': 'eq-bar 0.5s ease-in-out infinite',
+      },
     },
   },
   plugins: [typography],

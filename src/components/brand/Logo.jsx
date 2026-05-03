@@ -1,19 +1,15 @@
 import { producerBrand } from '../../producerBrand.js'
 
-export function LogoMark({ className = 'size-6 text-primary' }) {
+const LOGO_SRC = '/hugen-music-logo.png'
+
+export function LogoMark({ className = 'size-14' }) {
   return (
-    <svg
-      className={className}
-      fill="none"
-      viewBox="0 0 48 48"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden
-    >
-      <path
-        d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z"
-        fill="currentColor"
-      />
-    </svg>
+    <img
+      src={LOGO_SRC}
+      alt=""
+      className={`shrink-0 object-contain ${className}`}
+      decoding="async"
+    />
   )
 }
 

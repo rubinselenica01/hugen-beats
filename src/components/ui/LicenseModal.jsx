@@ -36,6 +36,8 @@ export function LicenseModal({ open, onClose, track }) {
     alt,
     plans,
     licenseEyebrow,
+    previewAudioUrl,
+    previewPlaybackId,
   } = track
 
   const modal = (
@@ -69,6 +71,8 @@ export function LicenseModal({ open, onClose, track }) {
           tags={tags}
           image={image}
           alt={alt}
+          previewAudioUrl={previewAudioUrl}
+          previewPlaybackId={previewPlaybackId}
           plans={plans}
           eyebrow={licenseEyebrow ?? 'License'}
           selectedPlanName={selectedPlanName}

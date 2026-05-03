@@ -1,3 +1,10 @@
+import { useEffect, useState } from 'react'
+import { IconPlayButton } from './Button.jsx'
+import {
+  subscribeBeatPreviewPlayback,
+  toggleBeatPreviewPlayback,
+} from '../../utils/beatPreviewPlayback.js'
+
 const cartIconStyle = { fontVariationSettings: "'FILL' 1" }
 
 function LicenseAddToCartButton({ plan, onAddToCart }) {
@@ -32,32 +39,52 @@ export function SpotlightLicenseCard({
   selectedPlanName = null,
   onSelectPlan,
   onAddToCart,
+  previewAudioUrl,
+  previewPlaybackId,
 }) {
   const selectable = typeof onSelectPlan === 'function'
   const [singlePlan] = plans
+  const [activePlaybackId, setActivePlaybackId] = useState(null)
+
+  useEffect(() => {
+    return subscribeBeatPreviewPlayback(setActivePlaybackId)
+  }, [])
+
+  const playing =
+    previewPlaybackId != null &&
+    activePlaybackId != null &&
+    String(activePlaybackId) === String(previewPlaybackId)
+
+  function handlePlayClick(e) {
+    e.stopPropagation()
+    if (!previewAudioUrl || previewPlaybackId == null) return
+    toggleBeatPreviewPlayback(previewAudioUrl, previewPlaybackId, {
+      title,
+      image,
+      alt,
+    })
+  }
 
   return (
-    <div className="relative flex w-full flex-col overflow-hidden rounded-lg border border-white/5 bg-surface shadow-2xl lg:flex-row">
+    <div className="relative flex w-full flex-col items-stretch overflow-hidden rounded-lg border border-white/5 bg-surface shadow-2xl lg:flex-row">
       <div className="pointer-events-none absolute left-0 top-1/2 h-96 w-96 -translate-y-1/2 rounded-full bg-primary/10 blur-[100px]" />
-      <div className="group relative h-[280px] w-full flex-shrink-0 overflow-hidden sm:h-[360px] lg:h-[400px] lg:w-[400px]">
+      <div className="group relative h-[280px] w-full shrink-0 overflow-hidden sm:h-[360px] lg:h-auto lg:min-h-[400px] lg:w-[400px] lg:self-stretch">
         <img
           src={image}
           alt={alt}
-          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
         />
         <div className="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors duration-300 group-hover:bg-black/40">
-          <button
-            type="button"
-            className="flex h-20 w-20 scale-90 items-center justify-center rounded-full bg-primary/90 text-background-dark opacity-0 shadow-2xl backdrop-blur-sm transition-all duration-300 group-hover:scale-100 group-hover:opacity-100"
-            aria-label="Preview track"
-          >
-            <span
-              className="material-symbols-outlined ml-1 text-5xl"
-              style={{ fontVariationSettings: "'FILL' 1" }}
-            >
-              play_arrow
-            </span>
-          </button>
+          <IconPlayButton
+            size="lg"
+            playing={playing}
+            aria-label={playing ? 'Pause preview' : 'Play preview'}
+            onClick={handlePlayClick}
+            disabled={!previewAudioUrl || previewPlaybackId == null}
+            className={`scale-90 bg-primary/90 opacity-0 shadow-2xl backdrop-blur-sm transition-all duration-300 group-hover:scale-100 group-hover:opacity-100 disabled:pointer-events-none disabled:opacity-40 ${
+              playing ? '!opacity-100 !scale-100' : ''
+            }`}
+          />
         </div>
       </div>
       <div className="relative z-10 flex flex-1 flex-col justify-center bg-gradient-to-r from-surface to-background-dark p-6 sm:p-8 lg:p-12">

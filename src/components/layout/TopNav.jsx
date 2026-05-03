@@ -31,10 +31,10 @@ export function TopNav({ links }) {
       <div className="layout-container flex h-full grow flex-col">
         <div className="flex flex-1 justify-center py-0">
           <div className="layout-content-container flex w-full flex-1 flex-col">
-            <header className="grid w-full grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-x-2 whitespace-nowrap border-b border-solid border-nav-border bg-background-dark/80 px-4 py-4 backdrop-blur-md sm:gap-x-4 sm:px-10">
+            <header className="grid w-full grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-x-2 whitespace-nowrap border-b border-solid border-nav-border bg-background-dark/80 px-4 py-3 backdrop-blur-md sm:gap-x-4 sm:px-10">
               <Link
                 to="/"
-                className="flex min-w-0 cursor-pointer items-center gap-3 justify-self-start text-white transition-opacity hover:opacity-80 sm:gap-4"
+                className="flex min-w-0 cursor-pointer items-center gap-2 justify-self-start text-white transition-opacity hover:opacity-80 sm:gap-3"
               >
                 <LogoMark />
                 <LogoWordmark className="hidden sm:block" />

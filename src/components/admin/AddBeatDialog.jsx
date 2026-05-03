@@ -6,7 +6,7 @@ import { adminFetch } from '../../utils/adminFetch.js'
 import { parseFastApiErrorDetail } from '../../utils/fastApiParse.js'
 import { isServerErrorHttpStatus } from '../../utils/netErrors.js'
 
-/** Multipart POST — matches BeatMusicMetadataCreatePayload on the API. */
+/** Multipart POST — files are stored in R2 by the API; no browser upload to R2. */
 export function AddBeatDialog({ open, onClose, onSaved }) {
   const formId = useId()
   const formRef = useRef(null)
@@ -37,10 +37,20 @@ export function AddBeatDialog({ open, onClose, onSaved }) {
     const form = formRef.current
     if (!form) return
     setError(null)
-    setSubmitting(true)
+
+    const previewFile = form.elements.preview?.files?.[0]
+    const premiumFile = form.elements.premium_files?.files?.[0]
+    const coverFile = form.elements.cover_image?.files?.[0]
+    if (!previewFile || !premiumFile || !coverFile) {
+      setError('Please choose preview, ZIP, and cover image.')
+      return
+    }
+
     const fd = new FormData(form)
+
+    setSubmitting(true)
     try {
-      const res = await adminFetch('/admin/beat', {
+      const res = await adminFetch('/beats', {
         method: 'POST',
         body: fd,
       })
@@ -49,17 +59,17 @@ export function AddBeatDialog({ open, onClose, onSaved }) {
         onClose()
         return
       }
-      if (isServerErrorHttpStatus(res.status)) {
-        setError('Something went wrong. Try again later.')
-        return
-      }
-      let message = `Could not save (${res.status})`
+      let message = null
       try {
-        const data = await res.json()
-        const parsed = parseFastApiErrorDetail(data?.detail)
-        if (parsed) message = parsed
+        const errBody = await res.json()
+        message = parseFastApiErrorDetail(errBody?.detail)
       } catch {
         /* ignore */
+      }
+      if (!message) {
+        message = isServerErrorHttpStatus(res.status)
+          ? 'Something went wrong. Try again later.'
+          : `Could not save (${res.status})`
       }
       setError(message)
     } catch {
@@ -79,7 +89,7 @@ export function AddBeatDialog({ open, onClose, onSaved }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby={`${formId}-title`}
-        className="relative max-h-[min(90vh,40rem)] w-full max-w-lg overflow-y-auto rounded-lg border border-nav-border bg-surface/95 p-6 shadow-xl"
+        className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-lg border border-nav-border bg-surface/95 p-6 shadow-xl"
         onClick={(ev) => ev.stopPropagation()}
       >
         <button
@@ -95,7 +105,8 @@ export function AddBeatDialog({ open, onClose, onSaved }) {
           Add beat
         </h2>
         <p className="mt-1 text-sm text-text-muted">
-          Preview (MP3), premium bundle (ZIP), and cover image are required.
+          Preview (MP3 or WAV), premium bundle (ZIP), and cover image (JPEG or PNG) are required. Files are
+          uploaded through the server to storage.
         </p>
 
         <form
@@ -148,15 +159,30 @@ export function AddBeatDialog({ open, onClose, onSaved }) {
             </div>
           </div>
           <div className="flex flex-col gap-1.5">
+            <label htmlFor={`${formId}-price`} className="text-sm font-medium text-text-muted">
+              Price (USD, whole dollars)
+            </label>
+            <input
+              id={`${formId}-price`}
+              name="price"
+              type="number"
+              required
+              min={0}
+              step={1}
+              defaultValue={0}
+              className="rounded-md border border-nav-border bg-background-dark px-3 py-2 text-sm text-text-main outline-none focus:border-primary/60 focus:ring-1 focus:ring-primary/30"
+            />
+          </div>
+          <div className="flex flex-col gap-1.5">
             <label htmlFor={`${formId}-preview`} className="text-sm font-medium text-text-muted">
-              Preview (MP3)
+              Preview (MP3 or WAV)
             </label>
             <input
               id={`${formId}-preview`}
               name="preview"
               type="file"
               required
-              accept=".mp3,audio/mpeg,audio/mp3"
+              accept=".mp3,.wav,audio/mpeg,audio/mp3,audio/wav"
               className="text-sm text-text-muted file:mr-3 file:rounded-md file:border-0 file:bg-primary/20 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-primary"
             />
           </div>
@@ -182,7 +208,7 @@ export function AddBeatDialog({ open, onClose, onSaved }) {
               name="cover_image"
               type="file"
               required
-              accept="image/jpeg,image/png,image/webp,image/gif,.jpg,.jpeg,.png,.webp,.gif"
+              accept="image/jpeg,image/png,.jpg,.jpeg,.png"
               className="text-sm text-text-muted file:mr-3 file:rounded-md file:border-0 file:bg-primary/20 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-primary"
             />
           </div>

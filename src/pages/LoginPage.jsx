@@ -1,10 +1,14 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { MaterialIcon } from '../components/ui/MaterialIcon.jsx'
 import { routes } from '../constants/routes.js'
-import { LOGIN_SUBMIT_TIMEOUT_MS } from '../constants/timing.js'
+import { ADMIN_ME_GUARD_TIMEOUT_MS, LOGIN_SUBMIT_TIMEOUT_MS } from '../constants/timing.js'
 import { adminFetch } from '../utils/adminFetch.js'
-import { parseFastApiErrorDetail } from '../utils/fastApiParse.js'
+import {
+  isMeResponseBody,
+  parseFastApiErrorDetail,
+  responseLooksLikeJson,
+} from '../utils/fastApiParse.js'
 import { isAbortError, isNetworkFailure, isServerErrorHttpStatus } from '../utils/netErrors.js'
 
 export default function LoginPage() {
@@ -19,6 +23,45 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState(null)
   const [submitting, setSubmitting] = useState(false)
+  const [sessionGateReady, setSessionGateReady] = useState(false)
+
+  useEffect(() => {
+    let cancelled = false
+    const controller = new AbortController()
+    const tid = window.setTimeout(() => controller.abort(), ADMIN_ME_GUARD_TIMEOUT_MS)
+
+    ;(async () => {
+      try {
+        const res = await adminFetch('/admin/me', { signal: controller.signal })
+        if (cancelled) return
+
+        if (
+          res.ok &&
+          responseLooksLikeJson(res)
+        ) {
+          let data = null
+          try {
+            data = await res.json()
+          } catch {
+            data = null
+          }
+          if (isMeResponseBody(data)) {
+            navigate(redirectTo, { replace: true })
+            return
+          }
+        }
+      } catch {
+        /* not logged in or unreachable — show form */
+      } finally {
+        window.clearTimeout(tid)
+      }
+      if (!cancelled) setSessionGateReady(true)
+    })()
+
+    return () => {
+      cancelled = true
+    }
+  }, [navigate, redirectTo])
 
   async function onSubmit(e) {
     e.preventDefault()
@@ -99,6 +142,14 @@ export default function LoginPage() {
     } finally {
       setSubmitting(false)
     }
+  }
+
+  if (!sessionGateReady) {
+    return (
+      <div className="flex min-h-[100dvh] w-full items-center justify-center bg-background-dark">
+        <p className="text-sm text-text-muted">Checking session…</p>
+      </div>
+    )
   }
 
   return (

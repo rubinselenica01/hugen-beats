@@ -1,4 +1,9 @@
+import { useEffect, useState } from 'react'
 import { IconPlayButton } from './Button.jsx'
+import {
+  subscribeBeatPreviewPlayback,
+  toggleBeatPreviewPlayback,
+} from '../../utils/beatPreviewPlayback.js'
 
 export function BeatCard({
   title,
@@ -8,7 +13,30 @@ export function BeatCard({
   alt,
   onSelectLicense,
   compact = false,
+  hideSelectLicense = false,
+  previewAudioUrl,
+  previewPlaybackId,
 }) {
+  const [activePlaybackId, setActivePlaybackId] = useState(null)
+
+  useEffect(() => {
+    return subscribeBeatPreviewPlayback(setActivePlaybackId)
+  }, [])
+
+  const playing =
+    previewPlaybackId != null &&
+    activePlaybackId != null &&
+    String(activePlaybackId) === String(previewPlaybackId)
+
+  function handlePlayClick(e) {
+    e.stopPropagation()
+    if (!previewAudioUrl || previewPlaybackId == null) return
+    toggleBeatPreviewPlayback(previewAudioUrl, previewPlaybackId, {
+      title,
+      image,
+      alt,
+    })
+  }
   return (
     <div
       className={`group relative flex cursor-pointer flex-col rounded-md border border-transparent bg-surface shadow-lg transition-all duration-300 hover:-translate-y-2 hover:border-white/10 hover:bg-surface-hover ${
@@ -29,7 +57,11 @@ export function BeatCard({
         />
         <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
           <IconPlayButton
-            className={`translate-y-4 group-hover:translate-y-0 ${
+            playing={playing}
+            aria-label={playing ? 'Pause preview' : 'Play preview'}
+            onClick={handlePlayClick}
+            disabled={!previewAudioUrl || previewPlaybackId == null}
+            className={`translate-y-4 group-hover:translate-y-0 disabled:pointer-events-none disabled:opacity-40 ${
               compact ? '!h-11 !w-11 [&_span]:!text-2xl' : ''
             }`}
           />
@@ -59,22 +91,24 @@ export function BeatCard({
             {price}
           </span>
         </div>
-        <div className={compact ? 'mt-3 w-full' : 'mt-3 w-full'}>
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation()
-              onSelectLicense?.()
-            }}
-            className={`w-full rounded-md border border-white/10 bg-white/5 font-bold uppercase tracking-wider text-text-muted transition-colors hover:border-primary/50 hover:bg-primary/10 hover:text-primary ${
-              compact
-                ? 'px-2 py-2 text-[11px]'
-                : 'px-3 py-2 text-xs'
-            }`}
-          >
-            Select License
-          </button>
-        </div>
+        {hideSelectLicense ? null : (
+          <div className={compact ? 'mt-3 w-full' : 'mt-3 w-full'}>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                onSelectLicense?.()
+              }}
+              className={`w-full rounded-md border border-white/10 bg-white/5 font-bold uppercase tracking-wider text-text-muted transition-colors hover:border-primary/50 hover:bg-primary/10 hover:text-primary ${
+                compact
+                  ? 'px-2 py-2 text-[11px]'
+                  : 'px-3 py-2 text-xs'
+              }`}
+            >
+              Select License
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )

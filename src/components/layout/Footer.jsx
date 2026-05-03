@@ -44,8 +44,8 @@ export function Footer({
           </div>
 
           <div className="order-3 flex flex-col items-center gap-4 md:items-end md:justify-self-end">
-            <div className="flex items-center gap-3 text-white">
-              <LogoMark className="size-5 text-primary" />
+            <div className="flex items-center gap-2 text-white">
+              <LogoMark className="size-12" />
               <span className="font-display text-lg font-bold uppercase tracking-tight">
                 {producerBrand}
               </span>

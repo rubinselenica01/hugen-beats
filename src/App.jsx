@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 import { routes } from './constants/routes.js'
 import { CartProvider } from './context/CartContext.jsx'
+import { BeatPreviewPlayerBar } from './components/ui/BeatPreviewPlayerBar.jsx'
 import BeatsCatalogPage from './pages/BeatsCatalogPage.jsx'
 import HomePage from './pages/HomePage.jsx'
 import { RequireAdminSession } from './components/auth/RequireAdminSession.jsx'
@@ -36,6 +37,7 @@ export default function App() {
           />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
+        <BeatPreviewPlayerBar />
       </CartProvider>
     </BrowserRouter>
   )

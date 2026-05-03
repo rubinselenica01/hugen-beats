@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Footer } from '../components/layout/Footer.jsx'
 import { TopNav } from '../components/layout/TopNav.jsx'
 import { LicenseModal } from '../components/ui/LicenseModal.jsx'
 import { BeatCard } from '../components/ui/BeatCard.jsx'
 import { SectionHeading } from '../components/ui/SectionHeading.jsx'
-import { beatsCatalog, footer, navLinksCatalog } from '../data/homeContent.js'
+import { defaultBeatPreviewAudioUrl, footer, navLinksCatalog } from '../data/homeContent.js'
+import { apiBeatToDisplayBeat, fetchCatalogBeats } from '../utils/catalogBeatsApi.js'
 
 const CARDS_PER_MOBILE_ROW = 4
 
@@ -19,10 +20,36 @@ function chunkEvery(items, size) {
   return chunks
 }
 
-const mobileCatalogRows = chunkEvery(beatsCatalog, CARDS_PER_MOBILE_ROW)
-
 export default function BeatsCatalogPage() {
   const [licenseTrack, setLicenseTrack] = useState(null)
+  const [beats, setBeats] = useState(null)
+  const [loadError, setLoadError] = useState(false)
+
+  useEffect(() => {
+    let cancelled = false
+    fetchCatalogBeats()
+      .then((raw) => {
+        if (cancelled) return
+        const list = Array.isArray(raw) ? raw.map(apiBeatToDisplayBeat) : []
+        setBeats(list)
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setLoadError(true)
+          setBeats([])
+        }
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const mobileCatalogRows = useMemo(
+    () => (beats && beats.length > 0 ? chunkEvery(beats, CARDS_PER_MOBILE_ROW) : []),
+    [beats],
+  )
+
+  const loading = beats === null && !loadError
 
   return (
     <div className="page-shell">
@@ -41,52 +68,74 @@ export default function BeatsCatalogPage() {
             title="Beats catalog"
             subtitle="Browse every track—same leases, same quality."
           />
-          {/* Mobile: each row = up to 4 cards in a horizontal scroller */}
-          <div className="flex flex-col gap-8 sm:hidden">
-            {mobileCatalogRows.map((row, rowIndex) => (
-              <div
-                key={rowIndex}
-                className="-mx-8 flex flex-nowrap gap-4 overflow-x-auto px-8 pb-2 pt-3 [-ms-overflow-style:none] [scrollbar-width:none] snap-x snap-mandatory [&::-webkit-scrollbar]:hidden"
-                style={{ WebkitOverflowScrolling: 'touch' }}
-              >
-                {row.map((beat) => (
+          {loadError ? (
+            <p className="text-sm text-red-300" role="alert">
+              Could not load beats. Try again later.
+            </p>
+          ) : loading ? (
+            <p className="text-sm text-text-muted">Loading beats…</p>
+          ) : !beats.length ? (
+            <p className="text-sm text-text-muted">No beats in the catalog yet.</p>
+          ) : (
+            <>
+              <div className="flex flex-col gap-8 sm:hidden">
+                {mobileCatalogRows.map((row, rowIndex) => (
                   <div
-                    key={beat.id}
-                    className="w-[min(85vw,18.5rem)] shrink-0 snap-start"
+                    key={rowIndex}
+                    className="-mx-8 flex flex-nowrap gap-4 overflow-x-auto px-8 pb-2 pt-3 [-ms-overflow-style:none] [scrollbar-width:none] snap-x snap-mandatory [&::-webkit-scrollbar]:hidden"
+                    style={{ WebkitOverflowScrolling: 'touch' }}
                   >
-                    <div className={beatCardShellClass}>
-                      <BeatCard
-                        compact
-                        title={beat.title}
-                        meta={beat.meta}
-                        price={beat.price}
-                        image={beat.image}
-                        alt={beat.alt}
-                        onSelectLicense={() => setLicenseTrack(beat)}
-                      />
-                    </div>
+                    {row.map((beat) => (
+                      <div
+                        key={beat.id}
+                        className="w-[min(85vw,18.5rem)] shrink-0 snap-start"
+                      >
+                        <div className={beatCardShellClass}>
+                          <BeatCard
+                            compact
+                            title={beat.title}
+                            meta={beat.meta}
+                            price={beat.price}
+                            image={beat.image}
+                            alt={beat.alt}
+                            previewAudioUrl={
+                              beat.previewAudioUrl ?? defaultBeatPreviewAudioUrl
+                            }
+                            previewPlaybackId={beat.id}
+                            onSelectLicense={() =>
+                              setLicenseTrack(beat.licenseTrack ?? beat)
+                            }
+                          />
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 ))}
               </div>
-            ))}
-          </div>
 
-          {/* sm+: grid — card width capped & centered like mobile / home */}
-          <div className="hidden sm:grid sm:grid-cols-2 sm:justify-items-center sm:gap-6 lg:grid-cols-4 lg:gap-8">
-            {beatsCatalog.map((beat) => (
-              <div key={beat.id} className={beatCardShellClass}>
-                <BeatCard
-                  compact
-                  title={beat.title}
-                  meta={beat.meta}
-                  price={beat.price}
-                  image={beat.image}
-                  alt={beat.alt}
-                  onSelectLicense={() => setLicenseTrack(beat)}
-                />
+              <div className="hidden sm:grid sm:grid-cols-2 sm:justify-items-center sm:gap-6 lg:grid-cols-4 lg:gap-8">
+                {beats.map((beat) => (
+                  <div key={beat.id} className={beatCardShellClass}>
+                    <BeatCard
+                      compact
+                      title={beat.title}
+                      meta={beat.meta}
+                      price={beat.price}
+                      image={beat.image}
+                      alt={beat.alt}
+                      previewAudioUrl={
+                        beat.previewAudioUrl ?? defaultBeatPreviewAudioUrl
+                      }
+                      previewPlaybackId={beat.id}
+                      onSelectLicense={() =>
+                        setLicenseTrack(beat.licenseTrack ?? beat)
+                      }
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </>
+          )}
         </div>
       </main>
       <Footer

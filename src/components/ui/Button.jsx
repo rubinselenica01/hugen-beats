@@ -59,6 +59,7 @@ export function ButtonOutline({
 export function IconPlayButton({
   className = '',
   size = 'md',
+  playing = false,
   ...props
 }) {
   const sizeCls =
@@ -74,10 +75,10 @@ export function IconPlayButton({
       {...props}
     >
       <span
-        className="material-symbols-outlined ml-1 text-4xl"
+        className={`material-symbols-outlined text-4xl ${playing ? '' : 'ml-1'}`}
         style={{ fontVariationSettings: "'FILL' 1" }}
       >
-        play_arrow
+        {playing ? 'pause' : 'play_arrow'}
       </span>
     </button>
   )
