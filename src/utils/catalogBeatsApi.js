@@ -1,4 +1,4 @@
-import { apiUrl } from './apiBase.js'
+import { apiUrl, jsonAcceptHeaders } from './apiBase.js'
 
 /**
  * Fetch beats for homepage / catalog (read-only catalog API).
@@ -6,7 +6,7 @@ import { apiUrl } from './apiBase.js'
  */
 export async function fetchCatalogBeats() {
   const res = await fetch(apiUrl('/catalog/beats'), {
-    headers: { Accept: 'application/json' },
+    headers: { ...jsonAcceptHeaders },
   })
   if (!res.ok) {
     throw new Error(`Catalog beats request failed (${res.status})`)

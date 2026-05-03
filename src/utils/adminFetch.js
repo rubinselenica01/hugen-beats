@@ -1,6 +1,6 @@
-import { apiUrl } from './apiBase.js'
+import { apiUrl, jsonAcceptHeaders } from './apiBase.js'
 
-const defaultHeaders = () => ({ Accept: 'application/json' })
+const defaultHeaders = () => ({ ...jsonAcceptHeaders })
 
 let refreshInFlight = null
 

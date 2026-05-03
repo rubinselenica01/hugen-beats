@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { adminLoginHrefWithRedirect } from '../../constants/routes.js'
 import { ADMIN_ME_GUARD_TIMEOUT_MS } from '../../constants/timing.js'
-import { adminFetch } from '../../utils/adminFetch.js'
-import { isMeResponseBody, responseLooksLikeJson } from '../../utils/fastApiParse.js'
+import { checkAdminSession } from '../../utils/adminSession.js'
 
 /**
  * Guards admin-only routes; redirects unauthenticated visitors to `/admin/login`
@@ -29,29 +28,10 @@ export function RequireAdminSession({ children }) {
       const controller = new AbortController()
       const tid = window.setTimeout(() => controller.abort(), ADMIN_ME_GUARD_TIMEOUT_MS)
       try {
-        const res = await adminFetch('/admin/me', {
-          signal: controller.signal,
-        })
+        const result = await checkAdminSession(controller.signal)
         if (cancelled) return
 
-        // Static hosts often rewrite unknown paths to index.html → 200 + HTML — do not trust res.ok alone.
-        if (
-          !res.ok ||
-          !responseLooksLikeJson(res)
-        ) {
-          await redirectToLogin()
-          return
-        }
-
-        let data = null
-        try {
-          data = await res.json()
-        } catch {
-          await redirectToLogin()
-          return
-        }
-
-        if (!isMeResponseBody(data)) {
+        if (!result.ok) {
           await redirectToLogin()
           return
         }

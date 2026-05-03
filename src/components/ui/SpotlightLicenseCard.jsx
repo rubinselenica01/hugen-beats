@@ -1,9 +1,5 @@
-import { useEffect, useState } from 'react'
 import { IconPlayButton } from './Button.jsx'
-import {
-  subscribeBeatPreviewPlayback,
-  toggleBeatPreviewPlayback,
-} from '../../utils/beatPreviewPlayback.js'
+import { useBeatPreviewPlaying, useBeatPreviewToggle } from '../../hooks/useBeatPreviewPlayback.js'
 
 const cartIconStyle = { fontVariationSettings: "'FILL' 1" }
 
@@ -44,26 +40,14 @@ export function SpotlightLicenseCard({
 }) {
   const selectable = typeof onSelectPlan === 'function'
   const [singlePlan] = plans
-  const [activePlaybackId, setActivePlaybackId] = useState(null)
-
-  useEffect(() => {
-    return subscribeBeatPreviewPlayback(setActivePlaybackId)
-  }, [])
-
-  const playing =
-    previewPlaybackId != null &&
-    activePlaybackId != null &&
-    String(activePlaybackId) === String(previewPlaybackId)
-
-  function handlePlayClick(e) {
-    e.stopPropagation()
-    if (!previewAudioUrl || previewPlaybackId == null) return
-    toggleBeatPreviewPlayback(previewAudioUrl, previewPlaybackId, {
-      title,
-      image,
-      alt,
-    })
-  }
+  const playing = useBeatPreviewPlaying(previewPlaybackId)
+  const handlePlayClick = useBeatPreviewToggle(
+    previewAudioUrl,
+    previewPlaybackId,
+    title,
+    image,
+    alt,
+  )
 
   return (
     <div className="relative flex w-full flex-col items-stretch overflow-hidden rounded-lg border border-white/5 bg-surface shadow-2xl lg:flex-row">

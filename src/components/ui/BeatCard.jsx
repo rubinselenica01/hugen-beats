@@ -1,9 +1,5 @@
-import { useEffect, useState } from 'react'
 import { IconPlayButton } from './Button.jsx'
-import {
-  subscribeBeatPreviewPlayback,
-  toggleBeatPreviewPlayback,
-} from '../../utils/beatPreviewPlayback.js'
+import { useBeatPreviewPlaying, useBeatPreviewToggle } from '../../hooks/useBeatPreviewPlayback.js'
 
 export function BeatCard({
   title,
@@ -17,26 +13,15 @@ export function BeatCard({
   previewAudioUrl,
   previewPlaybackId,
 }) {
-  const [activePlaybackId, setActivePlaybackId] = useState(null)
+  const playing = useBeatPreviewPlaying(previewPlaybackId)
+  const handlePlayClick = useBeatPreviewToggle(
+    previewAudioUrl,
+    previewPlaybackId,
+    title,
+    image,
+    alt,
+  )
 
-  useEffect(() => {
-    return subscribeBeatPreviewPlayback(setActivePlaybackId)
-  }, [])
-
-  const playing =
-    previewPlaybackId != null &&
-    activePlaybackId != null &&
-    String(activePlaybackId) === String(previewPlaybackId)
-
-  function handlePlayClick(e) {
-    e.stopPropagation()
-    if (!previewAudioUrl || previewPlaybackId == null) return
-    toggleBeatPreviewPlayback(previewAudioUrl, previewPlaybackId, {
-      title,
-      image,
-      alt,
-    })
-  }
   return (
     <div
       className={`group relative flex cursor-pointer flex-col rounded-md border border-transparent bg-surface shadow-lg transition-all duration-300 hover:-translate-y-2 hover:border-white/10 hover:bg-surface-hover ${

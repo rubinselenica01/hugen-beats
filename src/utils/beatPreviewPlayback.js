@@ -92,6 +92,8 @@ export function toggleBeatPreviewPlayback(url, playbackId, meta = null) {
   }
 
   const audio = new Audio(url)
+  /* Required for waveform / Web Audio when preview URL is on a CDN (cross-origin). */
+  audio.crossOrigin = 'anonymous'
   const onEnded = () => {
     notifyPlayback(null)
     notifySession()

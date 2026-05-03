@@ -1,55 +1,26 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Footer } from '../components/layout/Footer.jsx'
 import { TopNav } from '../components/layout/TopNav.jsx'
 import { LicenseModal } from '../components/ui/LicenseModal.jsx'
 import { BeatCard } from '../components/ui/BeatCard.jsx'
 import { SectionHeading } from '../components/ui/SectionHeading.jsx'
 import { defaultBeatPreviewAudioUrl, footer, navLinksCatalog } from '../data/homeContent.js'
-import { apiBeatToDisplayBeat, fetchCatalogBeats } from '../utils/catalogBeatsApi.js'
+import { useCatalogBeats } from '../hooks/useCatalogBeats.js'
+import { chunkEvery } from '../utils/chunk.js'
 
 const CARDS_PER_MOBILE_ROW = 4
 
 /** Same max width as home featured beats — keeps cards one consistent size */
 const beatCardShellClass = 'w-full min-w-0 max-w-[18.5rem]'
 
-function chunkEvery(items, size) {
-  const chunks = []
-  for (let i = 0; i < items.length; i += size) {
-    chunks.push(items.slice(i, i + size))
-  }
-  return chunks
-}
-
 export default function BeatsCatalogPage() {
   const [licenseTrack, setLicenseTrack] = useState(null)
-  const [beats, setBeats] = useState(null)
-  const [loadError, setLoadError] = useState(false)
-
-  useEffect(() => {
-    let cancelled = false
-    fetchCatalogBeats()
-      .then((raw) => {
-        if (cancelled) return
-        const list = Array.isArray(raw) ? raw.map(apiBeatToDisplayBeat) : []
-        setBeats(list)
-      })
-      .catch(() => {
-        if (!cancelled) {
-          setLoadError(true)
-          setBeats([])
-        }
-      })
-    return () => {
-      cancelled = true
-    }
-  }, [])
+  const { beats, loadError, loading } = useCatalogBeats()
 
   const mobileCatalogRows = useMemo(
     () => (beats && beats.length > 0 ? chunkEvery(beats, CARDS_PER_MOBILE_ROW) : []),
     [beats],
   )
-
-  const loading = beats === null && !loadError
 
   return (
     <div className="page-shell">

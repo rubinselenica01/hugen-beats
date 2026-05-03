@@ -20,7 +20,7 @@ function MiniEqualizer({ playing }) {
       {bars.map((i) => (
         <span
           key={i}
-          className={`w-1 origin-bottom rounded-sm bg-primary/90 motion-reduce:animate-none ${
+          className={`h-7 w-1 origin-bottom rounded-sm bg-primary/90 motion-reduce:animate-none ${
             playing ? 'animate-eq-bar' : 'opacity-40 motion-reduce:opacity-40'
           }`}
           style={
