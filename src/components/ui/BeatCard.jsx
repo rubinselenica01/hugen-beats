@@ -3,6 +3,7 @@ import { useBeatPreviewPlaying, useBeatPreviewToggle } from '../../hooks/useBeat
 
 export function BeatCard({
   title,
+  description = '',
   meta,
   price,
   image,
@@ -12,6 +13,8 @@ export function BeatCard({
   hideSelectLicense = false,
   previewAudioUrl,
   previewPlaybackId,
+  topRightSlot = null,
+  hiddenFromCatalog = false,
 }) {
   const playing = useBeatPreviewPlaying(previewPlaybackId)
   const handlePlayClick = useBeatPreviewToggle(
@@ -28,6 +31,18 @@ export function BeatCard({
         compact ? 'p-3.5' : 'p-4'
       }`}
     >
+      {topRightSlot ? (
+        <div className="pointer-events-none absolute right-2 top-2 z-20 [&>*]:pointer-events-auto">
+          {topRightSlot}
+        </div>
+      ) : null}
+      {hiddenFromCatalog ? (
+        <div className="pointer-events-none absolute left-2 top-2 z-20">
+          <span className="rounded-full bg-black/70 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-200/95 ring-1 ring-amber-400/40">
+            Hidden
+          </span>
+        </div>
+      ) : null}
       <div
         className={`relative w-full overflow-hidden rounded bg-black ${
           compact
@@ -60,6 +75,15 @@ export function BeatCard({
         >
           {title}
         </h3>
+        {description?.trim() ? (
+          <p
+            className={`mt-1 line-clamp-2 text-text-muted ${
+              compact ? 'text-xs leading-snug' : 'text-sm leading-snug'
+            }`}
+          >
+            {description.trim()}
+          </p>
+        ) : null}
         <div className="mt-0.5 flex items-center justify-between gap-2">
           <span
             className={`min-w-0 truncate font-medium text-text-muted ${

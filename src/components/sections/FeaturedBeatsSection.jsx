@@ -41,6 +41,7 @@ export function FeaturedBeatsSection({
               <BeatCard
                 compact
                 title={beat.title}
+                description={beat.description}
                 meta={beat.meta}
                 price={beat.price}
                 image={beat.image}

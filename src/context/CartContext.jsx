@@ -7,10 +7,21 @@ import {
   useState,
 } from 'react'
 import { CartDrawer } from '../components/layout/CartDrawer.jsx'
+import { fetchCatalogBeats, subscribeCatalogSyncMessages } from '../utils/catalogBeatsApi.js'
 
 const CartContext = createContext(null)
 
 const CART_STORAGE_KEY = 'hugen-music-cart'
+
+/** Re-fetch visible catalog beats and drop cart lines for tracks no longer listed (hidden or deleted). */
+function visibleBeatIdsFromCatalogPayload(payload) {
+  const list = Array.isArray(payload) ? payload : []
+  return new Set(
+    list
+      .filter((b) => b != null && b.id != null)
+      .map((b) => String(b.id)),
+  )
+}
 
 function isValidCartLine(line) {
   if (!line || typeof line !== 'object') return false
@@ -91,6 +102,43 @@ export function CartProvider({ children }) {
 
   const removeFromCart = useCallback((lineId) => {
     setItems((prev) => prev.filter((line) => line.lineId !== lineId))
+  }, [])
+
+  useEffect(() => {
+    let cancelled = false
+
+    function pruneAgainstVisibleCatalog(payload) {
+      const visibleIds = visibleBeatIdsFromCatalogPayload(payload)
+      setItems((prev) =>
+        prev.filter((line) => visibleIds.has(String(line.track?.id))),
+      )
+    }
+
+    function syncCartWithCatalogFromNetwork() {
+      fetchCatalogBeats({ cache: 'no-store' })
+        .then((raw) => {
+          if (!cancelled) pruneAgainstVisibleCatalog(raw)
+        })
+        .catch(() => {
+          /* keep cart if catalog is unreachable */
+        })
+    }
+
+    syncCartWithCatalogFromNetwork()
+
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') syncCartWithCatalogFromNetwork()
+    }
+    document.addEventListener('visibilitychange', onVisibility)
+    const unsubscribeMutations = subscribeCatalogSyncMessages(syncCartWithCatalogFromNetwork)
+    const intervalId = window.setInterval(syncCartWithCatalogFromNetwork, 120_000)
+
+    return () => {
+      cancelled = true
+      document.removeEventListener('visibilitychange', onVisibility)
+      unsubscribeMutations()
+      window.clearInterval(intervalId)
+    }
   }, [])
 
   const value = useMemo(

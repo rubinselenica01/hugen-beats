@@ -65,6 +65,7 @@ export default function BeatsCatalogPage() {
                           <BeatCard
                             compact
                             title={beat.title}
+                            description={beat.description}
                             meta={beat.meta}
                             price={beat.price}
                             image={beat.image}
@@ -90,6 +91,7 @@ export default function BeatsCatalogPage() {
                     <BeatCard
                       compact
                       title={beat.title}
+                      description={beat.description}
                       meta={beat.meta}
                       price={beat.price}
                       image={beat.image}

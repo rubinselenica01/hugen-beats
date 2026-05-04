@@ -34,6 +34,7 @@ function shouldTryRefresh(path) {
 export async function adminFetch(path, init = {}) {
   const { headers: incoming = {}, ...rest } = init
   const url = apiUrl(path)
+  const method = (rest.method ?? 'GET').toString().toUpperCase()
   const doFetch = () =>
     fetch(url, {
       credentials: 'include',
@@ -42,6 +43,10 @@ export async function adminFetch(path, init = {}) {
         ...defaultHeaders(),
         ...incoming,
       },
+      cache:
+        rest.cache ??
+        /* Avoid stale cached GET /beats after PATCH (looks like edits did not persist). */
+        (method === 'GET' ? 'no-store' : undefined),
     })
 
   let res = await doFetch()
