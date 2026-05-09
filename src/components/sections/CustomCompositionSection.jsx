@@ -1,8 +1,11 @@
+import { useNavigate } from 'react-router-dom'
+import { contactNavState } from '../../constants/contactPage.js'
 import { ButtonPrimary } from '../ui/Button.jsx'
 import { MaterialIcon } from '../ui/MaterialIcon.jsx'
 import { SectionHeading } from '../ui/SectionHeading.jsx'
 
 export function CustomCompositionSection({ content }) {
+  const navigate = useNavigate()
   const {
     sectionTitle,
     sectionSubtitle,
@@ -12,6 +15,7 @@ export function CustomCompositionSection({ content }) {
     features,
     startingPrice,
     cta,
+    ctaTo,
     sideImage,
   } = content
   return (
@@ -58,7 +62,15 @@ export function CustomCompositionSection({ content }) {
               </span>
               <span className="text-5xl font-black text-white">{startingPrice}</span>
             </div>
-            <ButtonPrimary type="button" className="w-full px-10 sm:w-auto">
+            <ButtonPrimary
+              type="button"
+              className="w-full px-10 sm:w-auto"
+              onClick={() => {
+                if (ctaTo) {
+                  navigate(ctaTo, { state: contactNavState.fromProject })
+                }
+              }}
+            >
               {cta}
             </ButtonPrimary>
           </div>

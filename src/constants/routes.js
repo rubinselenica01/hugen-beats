@@ -4,6 +4,7 @@
 export const routes = Object.freeze({
   home: '/',
   beatsCatalog: '/beats',
+  contact: '/contact',
   adminLogin: '/admin/login',
   /** Default post-login landing for admins */
   adminBeatManagement: '/admin/beat-management',

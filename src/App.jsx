@@ -4,6 +4,7 @@ import { CartProvider } from './context/CartContext.jsx'
 import { ScrollToTop } from './components/layout/ScrollToTop.jsx'
 import { BeatPreviewPlayerBar } from './components/ui/BeatPreviewPlayerBar.jsx'
 import BeatsCatalogPage from './pages/BeatsCatalogPage.jsx'
+import ContactPage from './pages/ContactPage.jsx'
 import HomePage from './pages/HomePage.jsx'
 import { RequireAdminSession } from './components/auth/RequireAdminSession.jsx'
 import AdminBeatManagementPage from './pages/AdminBeatManagementPage.jsx'
@@ -18,6 +19,7 @@ export default function App() {
         <Routes>
           <Route path={routes.home} element={<HomePage />} />
           <Route path={routes.beatsCatalog} element={<BeatsCatalogPage />} />
+          <Route path={routes.contact} element={<ContactPage />} />
           <Route path={routes.adminLogin} element={<LoginPage />} />
           <Route
             path={routes.adminBeatManagement}

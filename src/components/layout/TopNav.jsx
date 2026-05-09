@@ -36,7 +36,7 @@ export function TopNav({ links }) {
                 to="/"
                 className="flex min-w-0 cursor-pointer items-center gap-2 justify-self-start text-white transition-opacity hover:opacity-80 sm:gap-3"
               >
-                <LogoMark />
+                <LogoMark className="size-12" />
                 <LogoWordmark className="hidden sm:block" />
               </Link>
               <nav

@@ -126,18 +126,11 @@ export function CartProvider({ children }) {
 
     syncCartWithCatalogFromNetwork()
 
-    const onVisibility = () => {
-      if (document.visibilityState === 'visible') syncCartWithCatalogFromNetwork()
-    }
-    document.addEventListener('visibilitychange', onVisibility)
     const unsubscribeMutations = subscribeCatalogSyncMessages(syncCartWithCatalogFromNetwork)
-    const intervalId = window.setInterval(syncCartWithCatalogFromNetwork, 120_000)
 
     return () => {
       cancelled = true
-      document.removeEventListener('visibilitychange', onVisibility)
       unsubscribeMutations()
-      window.clearInterval(intervalId)
     }
   }, [])
 

@@ -1,4 +1,5 @@
 import { producerBrand } from '../producerBrand.js'
+import { routes } from '../constants/routes.js'
 
 const img = (id, w = 800, h = 600) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&h=${h}&q=80`
@@ -29,9 +30,7 @@ export const navLinks = [
 ]
 
 /** Top nav on /beats — omits home-only anchors (featured beats, about). */
-export const navLinksCatalog = [
-  { to: '/#beats', label: 'Licenses', licensesOverlay: true },
-]
+export const navLinksCatalog = [{ to: '/#beats', label: 'Licenses', licensesOverlay: true }]
 
 /** Copy shown when opening Licenses from the nav (blurred backdrop overlay). */
 export const licensesOverlayContent = {
@@ -315,6 +314,7 @@ export const customComposition = {
   ],
   startingPrice: '$1000',
   cta: 'Start a project',
+  ctaTo: routes.contact,
   sideImage: img('1598488035139-03d029a0ce5a', 600, 800),
 }
 

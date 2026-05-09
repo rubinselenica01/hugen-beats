@@ -1,4 +1,10 @@
+import { useNavigate } from 'react-router-dom'
+import { ButtonPrimary } from '../ui/Button.jsx'
+import { contactNavState } from '../../constants/contactPage.js'
+import { routes } from '../../constants/routes.js'
+
 export function EditorialAboutSection({ about }) {
+  const navigate = useNavigate()
   const { eyebrow, title, portrait, paragraphs, paragraph2, credits } = about
   return (
     <section className="mt-12 w-full bg-black py-24" id="about">
@@ -38,6 +44,13 @@ export function EditorialAboutSection({ about }) {
                 </span>
               ))}
             </div>
+            <ButtonPrimary
+              type="button"
+              className="mt-4 w-full max-w-md self-start px-10 sm:w-auto"
+              onClick={() => navigate(routes.contact, { state: contactNavState.fromAbout })}
+            >
+              Contact Us
+            </ButtonPrimary>
           </div>
         </div>
       </div>
