@@ -151,3 +151,13 @@ export function stopBeatPreviewPlayback() {
   notifyPlayback(null)
   notifySession()
 }
+
+/**
+ * If the open preview session belongs to this id (playing or paused), stop and hide the bar.
+ * Used when a beat is removed from the catalog while its preview is still loaded.
+ */
+export function stopBeatPreviewPlaybackForPlaybackId(playbackId) {
+  if (playbackId == null || player.playbackId == null) return
+  if (String(player.playbackId) !== String(playbackId)) return
+  stopBeatPreviewPlayback()
+}

@@ -8,6 +8,7 @@ import { MaterialIcon } from '../components/ui/MaterialIcon.jsx'
 import { routes } from '../constants/routes.js'
 import { adminFetch } from '../utils/adminFetch.js'
 import { notifyCatalogBeatsChanged } from '../utils/catalogBeatsApi.js'
+import { stopBeatPreviewPlaybackForPlaybackId } from '../utils/beatPreviewPlayback.js'
 
 const CARDS_PER_MOBILE_ROW = 4
 
@@ -115,6 +116,7 @@ export default function AdminBeatManagementPage() {
       }
       setDeleteDialogBeat(null)
       setEditingBeat((e) => (e?.id === beat.id ? null : e))
+      stopBeatPreviewPlaybackForPlaybackId(beat.id)
       bumpBeatsListAndNotifyCatalog()
     } catch {
       setBeatsError('Could not reach the server.')
