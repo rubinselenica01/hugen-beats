@@ -5,9 +5,12 @@ export const routes = Object.freeze({
   home: '/',
   beatsCatalog: '/beats',
   contact: '/contact',
+  checkout: '/checkout',
+  checkoutStatus: '/checkout/status',
   adminLogin: '/admin/login',
   /** Default post-login landing for admins */
   adminBeatManagement: '/admin/beat-management',
+  adminPayments: '/admin/payments',
 })
 
 /**

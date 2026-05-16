@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { AddBeatDialog } from '../components/admin/AddBeatDialog.jsx'
+import AdminChrome from '../components/admin/AdminChrome.jsx'
 import { DeleteBeatConfirmDialog } from '../components/admin/DeleteBeatConfirmDialog.jsx'
-import { LogoMark, LogoWordmark } from '../components/brand/Logo.jsx'
 import { BeatCard } from '../components/ui/BeatCard.jsx'
 import { MaterialIcon } from '../components/ui/MaterialIcon.jsx'
 import {
@@ -21,8 +21,6 @@ import { chunkEvery } from '../utils/chunk.js'
 
 export default function AdminBeatManagementPage() {
   const navigate = useNavigate()
-  const [loggingOut, setLoggingOut] = useState(false)
-  const [logoutError, setLogoutError] = useState(null)
   const [beats, setBeats] = useState(null)
   const [beatsError, setBeatsError] = useState(null)
   const [beatsLoading, setBeatsLoading] = useState(true)
@@ -68,26 +66,6 @@ export default function AdminBeatManagementPage() {
   function bumpBeatsListAndNotifyCatalog() {
     setBeatsListVersion((v) => v + 1)
     notifyCatalogBeatsChanged()
-  }
-
-  async function handleLogout() {
-    setLogoutError(null)
-    setLoggingOut(true)
-    try {
-      const res = await adminFetch('/admin/logout', {
-        method: 'POST',
-      })
-
-      if (res.ok) {
-        navigate(routes.adminLogin, { replace: true })
-        return
-      }
-      setLogoutError('Could not sign out. Try again.')
-    } catch {
-      setLogoutError('Could not reach the server.')
-    } finally {
-      setLoggingOut(false)
-    }
   }
 
   const beatCount = beats?.length ?? 0
@@ -170,10 +148,7 @@ export default function AdminBeatManagementPage() {
   }
 
   return (
-    <div
-      className="flex min-h-[100dvh] w-full flex-col bg-background-dark"
-      aria-label="Admin beat management"
-    >
+    <AdminChrome aria-label="Admin beat management">
       <DeleteBeatConfirmDialog
         beat={deleteDialogBeat}
         isDeleting={
@@ -199,34 +174,6 @@ export default function AdminBeatManagementPage() {
         }}
         onSaved={() => bumpBeatsListAndNotifyCatalog()}
       />
-      <header className="shrink-0 border-b border-solid border-nav-border bg-background-dark/80 px-4 py-3 backdrop-blur-md sm:px-10">
-        <div className="flex items-center justify-between gap-4">
-          <Link
-            to="/"
-            className="inline-flex min-w-0 cursor-pointer items-center gap-2 self-center text-white transition-opacity hover:opacity-80 sm:gap-3"
-          >
-            <LogoMark />
-            <LogoWordmark className="m-0 min-w-0 truncate text-lg sm:text-xl" />
-          </Link>
-          <div className="flex flex-col items-end gap-1">
-            {logoutError ? (
-              <p className="max-w-[16rem] text-right text-sm text-red-300" role="alert">
-                {logoutError}
-              </p>
-            ) : null}
-            <button
-              type="button"
-              onClick={handleLogout}
-              disabled={loggingOut}
-              className="inline-flex items-center gap-2 rounded-full border border-nav-border bg-surface px-4 py-2 text-sm font-semibold text-text-main transition-colors hover:border-primary/40 hover:bg-surface-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              <MaterialIcon name="logout" className="text-[20px]" />
-              {loggingOut ? 'Signing out…' : 'Log out'}
-            </button>
-          </div>
-        </div>
-      </header>
-
       <main className="page-container flex flex-1 flex-col gap-6 px-6 pb-12 pt-8 md:px-10 md:pt-10">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
@@ -294,6 +241,6 @@ export default function AdminBeatManagementPage() {
           </section>
         )}
       </main>
-    </div>
+    </AdminChrome>
   )
 }

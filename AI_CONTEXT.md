@@ -2,7 +2,7 @@
 
 **react-producer** (npm package name in `package.json`: **`hugen-music`**) is a **React 18 SPA** built with **Vite 5**, **React Router 6**, and **Tailwind CSS 3**. It is the storefront and admin UI for the Beat Producer ecosystem: it reads the public catalog from **`GET /catalog/beats`**, performs admin beat CRUD via **`/beats`** with **HttpOnly cookie JWTs**, and submits the contact form to **`POST /api/contact`**.
 
-There is **no backend inside this package** — it assumes a **FastAPI Beat Producer API** (see sibling **`beat-producer`** in the monorepo). There is **no payment integration** in code: the cart **Checkout** control is presentational only (`CartDrawer.jsx`).
+There is **no backend inside this package** — it assumes a **FastAPI Beat Producer API** (see sibling **`beat-producer`** in the monorepo). **Crypto checkout** uses **`POST /api/payments/checkout`** and **`GET /api/payments/checkout-options`** (see `paymentsService.js`, `CheckoutPage.jsx`). USDT ERC-20 appears in the pay-with list only when the API has **`PAYMENTS_TEST_MODE=true`**.
 
 ---
 
@@ -185,7 +185,7 @@ See `.env.example` for **localhost vs 127.0.0.1** cookie caveat.
 2. Extend **`adminFetch`** / **`apiUrl`** for new authenticated endpoints; keep **`credentials: 'include'`** where cookies matter.
 3. For real-time catalog UX after admin edits, either subscribe pages to `subscribeCatalogSyncMessages` or lift catalog state to a provider (align with `CartContext` pattern).
 4. **`package.json` `name`** is `hugen-music` — do not rename folder assumptions without checking deploy configs.
-5. Integrating Stripe/checkout: wire **`CartDrawer`** and add env + API calls in new modules; none exist today.
+5. **Crypto checkout** is implemented (`CartDrawer` → `/checkout`); option list is driven by **`GET /api/payments/checkout-options`**. For Stripe or other providers, add parallel modules as needed.
 
 ---
 

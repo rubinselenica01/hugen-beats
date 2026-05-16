@@ -4,10 +4,13 @@ import { CartProvider } from './context/CartContext.jsx'
 import { ScrollToTop } from './components/layout/ScrollToTop.jsx'
 import { BeatPreviewPlayerBar } from './components/ui/BeatPreviewPlayerBar.jsx'
 import BeatsCatalogPage from './pages/BeatsCatalogPage.jsx'
+import CheckoutPage from './pages/CheckoutPage.jsx'
 import ContactPage from './pages/ContactPage.jsx'
+import PaymentStatusPage from './pages/PaymentStatusPage.jsx'
 import HomePage from './pages/HomePage.jsx'
 import { RequireAdminSession } from './components/auth/RequireAdminSession.jsx'
 import AdminBeatManagementPage from './pages/AdminBeatManagementPage.jsx'
+import AdminPaymentsPage from './pages/AdminPaymentsPage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
 
@@ -19,6 +22,8 @@ export default function App() {
         <Routes>
           <Route path={routes.home} element={<HomePage />} />
           <Route path={routes.beatsCatalog} element={<BeatsCatalogPage />} />
+          <Route path={routes.checkout} element={<CheckoutPage />} />
+          <Route path={routes.checkoutStatus} element={<PaymentStatusPage />} />
           <Route path={routes.contact} element={<ContactPage />} />
           <Route path={routes.adminLogin} element={<LoginPage />} />
           <Route
@@ -26,6 +31,14 @@ export default function App() {
             element={
               <RequireAdminSession>
                 <AdminBeatManagementPage />
+              </RequireAdminSession>
+            }
+          />
+          <Route
+            path={routes.adminPayments}
+            element={
+              <RequireAdminSession>
+                <AdminPaymentsPage />
               </RequireAdminSession>
             }
           />

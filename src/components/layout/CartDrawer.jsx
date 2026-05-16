@@ -1,5 +1,7 @@
 import { useEffect, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { createPortal } from 'react-dom'
+import { routes } from '../../constants/routes.js'
 import { useBodyScrollLock } from '../../hooks/useBodyScrollLock.js'
 import { ButtonPrimary } from '../ui/Button.jsx'
 
@@ -21,6 +23,7 @@ function formatUsd(n) {
 
 export function CartDrawer({ open, onClose, items, onRemove }) {
   useBodyScrollLock(open)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!open) return
@@ -131,7 +134,14 @@ export function CartDrawer({ open, onClose, items, onRemove }) {
               </span>
             </div>
           ) : null}
-          <ButtonPrimary type="button" className="w-full">
+          <ButtonPrimary
+            type="button"
+            className="w-full"
+            onClick={() => {
+              onClose()
+              navigate(routes.checkout)
+            }}
+          >
             Checkout
           </ButtonPrimary>
         </div>
