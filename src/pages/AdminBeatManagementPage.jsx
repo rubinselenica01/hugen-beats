@@ -5,23 +5,19 @@ import { DeleteBeatConfirmDialog } from '../components/admin/DeleteBeatConfirmDi
 import { LogoMark, LogoWordmark } from '../components/brand/Logo.jsx'
 import { BeatCard } from '../components/ui/BeatCard.jsx'
 import { MaterialIcon } from '../components/ui/MaterialIcon.jsx'
+import {
+  BEAT_CARD_MOBILE_CHUNK_SLOT_CLASS,
+  BEAT_CARD_SHELL_CLASS,
+  BEATS_DESKTOP_GRID_CLASS,
+  BEATS_MOBILE_SCROLL_ROW_CLASS,
+  BEATS_MOBILE_SCROLL_ROW_STYLE,
+  CARDS_PER_MOBILE_ROW,
+} from '../constants/beatsGrid.js'
 import { routes } from '../constants/routes.js'
 import { adminFetch } from '../utils/adminFetch.js'
 import { notifyCatalogBeatsChanged } from '../utils/catalogBeatsApi.js'
 import { stopBeatPreviewPlaybackForPlaybackId } from '../utils/beatPreviewPlayback.js'
-
-const CARDS_PER_MOBILE_ROW = 4
-
-/** Same max width as BeatsCatalogPage — keeps cards one consistent size */
-const beatCardShellClass = 'w-full min-w-0 max-w-[18.5rem]'
-
-function chunkEvery(items, size) {
-  const chunks = []
-  for (let i = 0; i < items.length; i += size) {
-    chunks.push(items.slice(i, i + size))
-  }
-  return chunks
-}
+import { chunkEvery } from '../utils/chunk.js'
 
 export default function AdminBeatManagementPage() {
   const navigate = useNavigate()
@@ -271,24 +267,24 @@ export default function AdminBeatManagementPage() {
                   {mobileCatalogRows.map((row, rowIndex) => (
                     <div
                       key={rowIndex}
-                      className="-mx-8 flex flex-nowrap gap-4 overflow-x-auto px-8 pb-2 pt-3 [-ms-overflow-style:none] [scrollbar-width:none] snap-x snap-mandatory [&::-webkit-scrollbar]:hidden"
-                      style={{ WebkitOverflowScrolling: 'touch' }}
+                      className={BEATS_MOBILE_SCROLL_ROW_CLASS}
+                      style={BEATS_MOBILE_SCROLL_ROW_STYLE}
                     >
                       {row.map((beat) => (
                         <div
                           key={beat.id}
-                          className="w-[min(85vw,18.5rem)] shrink-0 snap-start"
+                          className={BEAT_CARD_MOBILE_CHUNK_SLOT_CLASS}
                         >
-                          <div className={beatCardShellClass}>{adminBeatCard(beat)}</div>
+                          <div className={BEAT_CARD_SHELL_CLASS}>{adminBeatCard(beat)}</div>
                         </div>
                       ))}
                     </div>
                   ))}
                 </div>
 
-                <div className="hidden sm:grid sm:grid-cols-2 sm:justify-items-center sm:gap-6 lg:grid-cols-4 lg:gap-8">
+                <div className={BEATS_DESKTOP_GRID_CLASS}>
                   {beats.map((beat) => (
-                    <div key={beat.id} className={beatCardShellClass}>
+                    <div key={beat.id} className={BEAT_CARD_SHELL_CLASS}>
                       {adminBeatCard(beat)}
                     </div>
                   ))}
